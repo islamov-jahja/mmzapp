@@ -11,4 +11,8 @@ class ClientRepository(@Autowired private val springClientRepository: SpringClie
     override fun add(client: Client) {
         springClientRepository.save(client)
     }
+
+    override fun getByEmail(emailOfClient: String): Client {
+        return springClientRepository.getByEmailOfClient(emailOfClient)
+    }
 }

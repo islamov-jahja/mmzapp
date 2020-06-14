@@ -4,4 +4,5 @@ import com.natasha.mmzapp.domain.core.entity.Client
 
 interface IClientRepository {
     fun add(client: Client)
+    fun getByEmail(emailOfClient: String): Client?
 }
