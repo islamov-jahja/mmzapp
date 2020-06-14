@@ -13,19 +13,18 @@ import org.springframework.stereotype.Component
 
 @Component
 class JwtUserDetailsService(@Autowired val clientRepository: ClientRepository, @Autowired val passwordProcessor: PasswordProcessor) : UserDetailsService {
-    private val adminEmail: String = "admin@mail.ru"
-    private val adminPass: String = "admin123"
+    private val adminPosition: String = "adminOfServer"
 
     override fun loadUserByUsername(username: String?): UserDetails {
         if (username == null){
             throw UsernameNotFoundException(username)
         }
 
-        if (username == adminEmail){
-            return UserDetailsImpl(adminEmail, passwordProcessor.getHashOfPassword(adminPass), mutableListOf<GrantedAuthority>())
-        }
-
         val client = username.let { clientRepository.getByEmail(it) }
+
+        if (client.positionDirector == adminPosition){
+            return UserDetailsImpl(client.emailOfClient, passwordProcessor.getHashOfPassword(client.password), mutableListOf<GrantedAuthority>())
+        }
 
         return UserDetailsImpl(client.emailOfClient, client.password, mutableListOf<GrantedAuthority>())
     }
