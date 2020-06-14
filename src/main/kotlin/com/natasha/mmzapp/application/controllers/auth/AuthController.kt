@@ -2,6 +2,7 @@ package com.natasha.mmzapp.application.controllers.auth
 
 import com.natasha.mmzapp.application.controllers.auth.dto.Client
 import com.natasha.mmzapp.application.controllers.auth.dto.JWTRequest
+import com.natasha.mmzapp.application.controllers.auth.dto.JWTResponse
 import com.natasha.mmzapp.infrastructure.helpers.JwtTokenUtil
 import com.natasha.mmzapp.infrastructure.models.UserDetailsImpl
 import com.natasha.mmzapp.infrastructure.services.AuthServiceImpl
@@ -38,10 +39,16 @@ class AuthController (@Autowired val auth: AuthServiceImpl,
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     fun login(@RequestBody authenticationRequest: JWTRequest): Response{
-        authenticate(authenticationRequest.username, authenticationRequest.password);
+        try {
+            authenticate(authenticationRequest.username, authenticationRequest.password);
+        }catch (e: Exception){
+            return Response.status(Response.Status.BAD_REQUEST).build()
+        }
+
         val userDetails = userDetailsService.loadUserByUsername(authenticationRequest.username)
         val token = jwtTokenUtil.generateToken(userDetails);
-        return Response.ok(token).build()
+        val jsonResponse: JWTResponse = JWTResponse(token.toString())
+        return Response.ok(jsonResponse).build()
     }
 
     private fun authenticate(username: String, password: String) {

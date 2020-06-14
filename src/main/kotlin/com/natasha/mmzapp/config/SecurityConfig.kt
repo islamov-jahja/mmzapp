@@ -44,7 +44,7 @@ class SecurityConfig() : WebSecurityConfigurerAdapter() {
     protected override fun configure(http: HttpSecurity?) {
         if (http != null) {
             http.authorizeRequests()
-                    .antMatchers(HttpMethod.POST,"/api/auth/reg").authenticated()
+                    .antMatchers(HttpMethod.POST,"/api/auth/reg").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/auth/login").anonymous()
                     .anyRequest().authenticated()
                     .and()
