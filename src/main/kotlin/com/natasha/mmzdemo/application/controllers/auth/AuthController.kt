@@ -3,6 +3,7 @@ package com.natasha.mmzdemo.application.controllers.auth
 import com.natasha.mmzdemo.application.controllers.auth.dto.Client
 import com.natasha.mmzdemo.application.controllers.auth.dto.JWTRequest
 import com.natasha.mmzdemo.application.controllers.auth.dto.JWTResponse
+import com.natasha.mmzdemo.application.controllers.auth.exceptions.ClientExistsException
 import com.natasha.mmzdemo.infrastructure.helpers.JwtTokenUtil
 import com.natasha.mmzdemo.infrastructure.services.AuthServiceImpl
 import com.natasha.mmzdemo.infrastructure.services.JwtUserDetailsService
@@ -17,8 +18,9 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
-@Controller
+@RestController
 @RequestMapping("/api/auth")
 class AuthController (@Autowired val auth: AuthServiceImpl,
                       @Autowired val userDetailsService: JwtUserDetailsService,
@@ -27,8 +29,12 @@ class AuthController (@Autowired val auth: AuthServiceImpl,
 
    @PostMapping("/reg")
     fun reg(@RequestBody client: Client): ResponseEntity<Any>{
-        println(client)
-        auth.reg(client)
+
+       try {
+           auth.reg(client)
+       }catch (e: Exception){
+           throw ClientExistsException()
+       }
         return ResponseEntity.status(200).build()
     }
 
