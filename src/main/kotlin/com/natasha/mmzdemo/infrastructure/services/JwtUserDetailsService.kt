@@ -22,7 +22,7 @@ class JwtUserDetailsService(@Autowired val clientRepository: ClientRepository, @
         val client = username.let { clientRepository.getByEmail(it) }
 
         if (client.positionDirector == adminPosition){
-            return UserDetailsImpl(client.emailOfClient, passwordProcessor.getHashOfPassword(client.password), mutableListOf<GrantedAuthority>())
+            return UserDetailsImpl(client.emailOfClient, client.password, mutableListOf<GrantedAuthority>())
         }
 
         return UserDetailsImpl(client.emailOfClient, client.password, mutableListOf<GrantedAuthority>())
