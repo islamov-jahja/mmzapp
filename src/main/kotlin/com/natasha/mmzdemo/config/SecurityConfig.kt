@@ -46,6 +46,7 @@ class SecurityConfig() : WebSecurityConfigurerAdapter() {
             http.authorizeRequests()
                     .antMatchers(HttpMethod.POST,"/api/auth/reg").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/auth/login").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/auth/nds").anonymous()
                     .anyRequest().authenticated()
                     .and()
                     .cors().disable()

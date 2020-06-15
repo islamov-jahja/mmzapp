@@ -15,10 +15,7 @@ import org.springframework.security.authentication.DisabledException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/auth")
@@ -26,6 +23,11 @@ class AuthController (@Autowired val auth: AuthServiceImpl,
                       @Autowired val userDetailsService: JwtUserDetailsService,
                       @Autowired val jwtTokenUtil: JwtTokenUtil,
                       @Autowired val authenticationManager: AuthenticationManager){
+
+    @GetMapping("/nds")
+    fun ndsNotWant(): ResponseEntity<String>{
+        return ResponseEntity.status(200).body("Наташа, я не люблю считать НДС((")
+    }
 
    @PostMapping("/reg")
     fun reg(@RequestBody client: Client): ResponseEntity<Any>{
