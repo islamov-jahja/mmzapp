@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component
 
 @Component
 @EnableWebSecurity
-@ComponentScan("com.natasha.mmzapp.middleware.security")
+@ComponentScan("com.natasha.mmzdemo.middleware.security")
 class SecurityConfig() : WebSecurityConfigurerAdapter() {
 
 

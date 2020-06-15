@@ -7,47 +7,44 @@ import com.natasha.mmzdemo.infrastructure.helpers.JwtTokenUtil
 import com.natasha.mmzdemo.infrastructure.services.AuthServiceImpl
 import com.natasha.mmzdemo.infrastructure.services.JwtUserDetailsService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.DisabledException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Component
+import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
-import javax.ws.rs.*
-import javax.ws.rs.core.MediaType
-import javax.ws.rs.core.Response
+import org.springframework.web.bind.annotation.RequestMapping
 
-@Path("api/auth")
-@Component
+@Controller
+@RequestMapping("/api/auth")
 class AuthController (@Autowired val auth: AuthServiceImpl,
                       @Autowired val userDetailsService: JwtUserDetailsService,
                       @Autowired val jwtTokenUtil: JwtTokenUtil,
                       @Autowired val authenticationManager: AuthenticationManager){
 
-    @Path("/reg")
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    fun reg(@RequestBody client: Client): Response{
+   @PostMapping("/reg")
+    fun reg(@RequestBody client: Client): ResponseEntity<Any>{
         println(client)
         auth.reg(client)
-        return Response.ok().build()
+        return ResponseEntity.status(200).build()
     }
 
-    @Path("/login")
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    fun login(@RequestBody authenticationRequest: JWTRequest): Response{
+    @PostMapping("/login")
+    fun login(@RequestBody authenticationRequest: JWTRequest): ResponseEntity<Any>{
         try {
             authenticate(authenticationRequest.username, authenticationRequest.password);
         }catch (e: Exception){
-            return Response.status(Response.Status.BAD_REQUEST).build()
+            return ResponseEntity.status(400).build()
         }
 
         val userDetails = userDetailsService.loadUserByUsername(authenticationRequest.username)
         val token = jwtTokenUtil.generateToken(userDetails);
         val jsonResponse: JWTResponse = JWTResponse(token.toString())
         println("f")
-        return Response.ok(jsonResponse).build()
+        return ResponseEntity.ok(jsonResponse)
     }
 
     private fun authenticate(username: String, password: String) {
