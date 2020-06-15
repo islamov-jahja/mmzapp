@@ -17,6 +17,8 @@ repositories {
 }
 
 dependencies {
+	implementation("software.amazon.awssdk:s3:2.10.1")
+	implementation("software.amazon.awssdk:aws-sdk-java:2.10.1")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-jersey")
 	implementation("org.springframework.boot:spring-boot-starter-security")
@@ -44,5 +46,11 @@ tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs = listOf("-Xjsr305=strict")
 		jvmTarget = "11"
+	}
+}
+
+dependencyManagement {
+	imports {
+		mavenBom("com.amazonaws:aws-java-sdk-bom:1.11.228")
 	}
 }
