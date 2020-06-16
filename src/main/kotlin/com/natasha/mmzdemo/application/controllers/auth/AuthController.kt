@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api/auth")
 class AuthController (@Autowired val auth: AuthServiceImpl,

@@ -17,6 +17,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.stereotype.Component
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import java.util.*
 
 
 @Component
@@ -43,19 +47,28 @@ class SecurityConfig() : WebSecurityConfigurerAdapter() {
     @Override
     protected override fun configure(http: HttpSecurity?) {
         if (http != null) {
-            http.authorizeRequests()
+            http.cors().and().csrf().disable().authorizeRequests()
                     .antMatchers(HttpMethod.POST,"/api/auth/reg").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/auth/login").anonymous()
                     .antMatchers(HttpMethod.GET, "/api/auth/nds").anonymous()
                     .anyRequest().authenticated()
                     .and()
-                    .cors().disable()
-                    .csrf().disable()
                     .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
             http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter().javaClass)
         }
+    }
+
+
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource? {
+        val configuration = CorsConfiguration()
+        configuration.allowedOrigins = Arrays.asList("*")
+        configuration.allowedMethods = Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration)
+        return source
     }
 
     @Bean
