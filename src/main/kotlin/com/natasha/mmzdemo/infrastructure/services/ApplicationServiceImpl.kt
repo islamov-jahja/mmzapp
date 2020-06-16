@@ -1,0 +1,63 @@
+package com.natasha.mmzdemo.infrastructure.services
+
+import com.natasha.mmzdemo.application.controllers.application.dto.ApplicationRequest
+import com.natasha.mmzdemo.application.controllers.application.dto.ApplicationResponse
+import com.natasha.mmzdemo.application.controllers.application.dto.Si
+import com.natasha.mmzdemo.application.controllers.application.exceptions.ApplicationNotFoundException
+import com.natasha.mmzdemo.application.controllers.application.exceptions.ListSiNotForApplicationNotFound
+import com.natasha.mmzdemo.domain.core.entity.Application
+import com.natasha.mmzdemo.domain.core.enums.ApplicationStatus
+import com.natasha.mmzdemo.domain.core.services.ApplicationService
+import com.natasha.mmzdemo.infrastructure.repositories.ApplicationRepository
+import com.natasha.mmzdemo.infrastructure.repositories.ClientRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
+import java.util.*
+
+@Component
+class ApplicationServiceImpl(@Autowired private val applicationRepository: ApplicationRepository,
+                             @Autowired private val clientRepository: ClientRepository) : ApplicationService {
+    override fun createApplication(application: ApplicationRequest, userName: String) {
+        val client = clientRepository.getByEmail(userName)
+        val fileName = "${client.emailOfClient} + ${client.hashCode()}.docx"
+        val app = Application(Date(), client, ApplicationStatus.Created.toString(), fileName)
+
+        for (si in application.listSi){
+            val siEntity = com.natasha.mmzdemo.domain.core.entity.Si(si.name, si.description, si.type, si.factoryNumber, si.count, si.numberOnRegister, si.note)
+            app.addSi(siEntity)
+        }
+
+        applicationRepository.create(app)
+    }
+
+    override fun getListOfSi(applicationId: Long): List<Si> {
+        val listSi: MutableList<Si> = mutableListOf()
+
+        try {
+            val application = applicationRepository.getById(applicationId)
+
+            val listSiWithEntities = application.getListSi()
+            for (si in listSiWithEntities) {
+                listSi.add(si.toDTO())
+            }
+        }catch (e: Exception){
+            throw ListSiNotForApplicationNotFound()
+        }
+
+        return listSi
+    }
+
+    override fun getList(): List<ApplicationResponse> {
+        val listApplication: MutableList<ApplicationResponse> = mutableListOf()
+        try {
+            val listApplicationEntities = applicationRepository.getList()
+            for(application in listApplicationEntities){
+                listApplication.add(application.toApplicationResponse())
+            }
+        }catch (e: Exception){
+            throw ApplicationNotFoundException()
+        }
+
+        return listApplication
+    }
+}

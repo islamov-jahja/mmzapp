@@ -1,5 +1,6 @@
 package com.natasha.mmzdemo.application.controllers.auth
 
+import com.google.common.collect.Lists
 import com.natasha.mmzdemo.application.controllers.auth.dto.Client
 import com.natasha.mmzdemo.application.controllers.auth.dto.JWTRequest
 import com.natasha.mmzdemo.application.controllers.auth.dto.JWTResponse
@@ -8,8 +9,7 @@ import com.natasha.mmzdemo.infrastructure.helpers.JwtTokenUtil
 import com.natasha.mmzdemo.infrastructure.models.Role
 import com.natasha.mmzdemo.infrastructure.services.AuthServiceImpl
 import com.natasha.mmzdemo.infrastructure.services.JwtUserDetailsService
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import com.natasha.mmzdemo.middleware.security.AuthenticatedUser
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.http.ResponseEntity
@@ -19,14 +19,15 @@ import org.springframework.security.authentication.DisabledException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.stereotype.Component
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import springfox.documentation.builders.PathSelectors
 import springfox.documentation.builders.RequestHandlerSelectors
+import springfox.documentation.service.ApiKey
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
+
 
 @RestController
 @RequestMapping("/api/auth")
@@ -36,13 +37,14 @@ class AuthController (@Autowired val auth: AuthServiceImpl,
                       @Autowired val jwtTokenUtil: JwtTokenUtil,
                       @Autowired val authenticationManager: AuthenticationManager){
 
-    @GetMapping("/info")
-    fun info(@RequestHeader authorization: String): ResponseEntity<Client>{
-        val jwtToken = authorization.substring(7)
-        val userName = jwtTokenUtil.getUsernameFromToken(jwtToken)
-        val userDetails = userDetailsService.loadUserByUsername(userName)
+    @Autowired
+    private var authenticatedUser: AuthenticatedUser = AuthenticatedUser()
 
-        return ResponseEntity.ok().body(userName?.let { auth.getClient(it) })
+    @GetMapping("/info")
+    fun info(): ResponseEntity<Client>{
+        val userName = authenticatedUser.getUserName()
+        val userDetails = userDetailsService.loadUserByUsername(userName)
+        return ResponseEntity.ok().body(auth.getClient(userName))
     }
 
    @PostMapping("/reg")
@@ -86,14 +88,5 @@ class AuthController (@Autowired val auth: AuthServiceImpl,
         } catch (e: BadCredentialsException) {
             throw Exception("INVALID_CREDENTIALS", e);
         }
-    }
-
-    @Bean
-    fun api(): Docket{
-        return Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
-                .build()
     }
 }

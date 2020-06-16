@@ -21,6 +21,8 @@ class JwtRequestFilter : OncePerRequestFilter() {
     @Autowired
     private val jwtUserDetailsService: JwtUserDetailsService? = null
 
+    @Autowired
+    private var authenticatedUser: AuthenticatedUser = AuthenticatedUser()
 
     @Autowired
     private val jwtTokenUtil: JwtTokenUtil? = null
@@ -63,7 +65,7 @@ class JwtRequestFilter : OncePerRequestFilter() {
                     val usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.authorities)
 
-
+                    authenticatedUser.setUserName(username)
                     usernamePasswordAuthenticationToken.details = WebAuthenticationDetailsSource().buildDetails(request)
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken)
                 }

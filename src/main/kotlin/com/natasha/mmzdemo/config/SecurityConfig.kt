@@ -1,5 +1,6 @@
 package com.natasha.mmzdemo.config
 
+import com.natasha.mmzdemo.infrastructure.models.Role
 import com.natasha.mmzdemo.middleware.security.JwtAuthenticationEntryPoint
 import com.natasha.mmzdemo.middleware.security.JwtRequestFilter
 import org.springframework.beans.factory.annotation.Autowired
@@ -50,7 +51,8 @@ class SecurityConfig() : WebSecurityConfigurerAdapter() {
             http.cors().and().csrf().disable().authorizeRequests()
                     .antMatchers(HttpMethod.POST,"/api/auth/reg").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/auth/login").anonymous()
-                    .antMatchers(HttpMethod.GET, "/api/auth/info").authenticated()
+                    .antMatchers(HttpMethod.GET, "/api/auth/info", "/application", "/application/{id}/listSi").authenticated()
+                    .antMatchers(HttpMethod.POST, "/application").hasAuthority(Role.Client.toString())
                     .anyRequest().anonymous()
                     .and()
                     .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
