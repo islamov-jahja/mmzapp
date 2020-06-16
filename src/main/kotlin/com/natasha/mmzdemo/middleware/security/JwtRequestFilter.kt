@@ -26,7 +26,11 @@ class JwtRequestFilter : OncePerRequestFilter() {
     private val jwtTokenUtil: JwtTokenUtil? = null
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
-        response.addHeader("Access-Control-Allow-Header", "Authorization, Content-Type")
+        response.addHeader("Access-Control-Allow-Header", "X-Requested-With, Access-Control-Allow-Headers, Access-Control-Request-Method, Content-Type, Accept, Origin, Authorization")
+        response.addHeader("Access-Control-Max-Age", "3600")
+        response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
+        response.addHeader("Access-Control-Allow-Origin", "*")
+
         val requestTokenHeader = request.getHeader("Authorization")
 
         var username: String? = null
