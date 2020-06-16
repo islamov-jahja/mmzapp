@@ -3,6 +3,8 @@ package com.natasha.mmzdemo.infrastructure.models
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
+
+
 class UserDetailsImpl(_userName: String,
                       _password: String,
                       _authorities: MutableList<out GrantedAuthority>) : UserDetails {

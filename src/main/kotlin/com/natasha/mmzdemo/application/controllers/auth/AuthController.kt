@@ -5,6 +5,7 @@ import com.natasha.mmzdemo.application.controllers.auth.dto.JWTRequest
 import com.natasha.mmzdemo.application.controllers.auth.dto.JWTResponse
 import com.natasha.mmzdemo.application.controllers.auth.exceptions.ClientExistsException
 import com.natasha.mmzdemo.infrastructure.helpers.JwtTokenUtil
+import com.natasha.mmzdemo.infrastructure.models.Role
 import com.natasha.mmzdemo.infrastructure.services.AuthServiceImpl
 import com.natasha.mmzdemo.infrastructure.services.JwtUserDetailsService
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,10 +14,13 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.DisabledException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/auth")
 class AuthController (@Autowired val auth: AuthServiceImpl,
@@ -49,10 +53,17 @@ class AuthController (@Autowired val auth: AuthServiceImpl,
         }
 
         val userDetails = userDetailsService.loadUserByUsername(authenticationRequest.username)
-        val token = jwtTokenUtil.generateToken(userDetails);
-        val jsonResponse: JWTResponse = JWTResponse(token.toString())
+        val token = jwtTokenUtil.generateToken(userDetails)
+        val jsonResponse: JWTResponse = JWTResponse(token.toString(), getROle(userDetails))
         println("f")
         return ResponseEntity.ok(jsonResponse)
+    }
+
+    private fun getROle(userDetails: UserDetails): Role{
+        return when(val isAdmin = userDetails.authorities.contains(SimpleGrantedAuthority(Role.Admin.toString()))){
+            true -> Role.Admin
+            else -> Role.Client
+        }
     }
 
     private fun authenticate(username: String, password: String) {
