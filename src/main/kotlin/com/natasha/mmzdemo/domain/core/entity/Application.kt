@@ -17,23 +17,23 @@ class Application(_date: Date,
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column("application_id")
+    @Column(name = "application_id")
     val id: Long = 0
 
-    @Column("created_date")
+    @Column(name = "created_date")
     private val createdDate: Date = _date
 
     @OneToMany(fetch = FetchType.EAGER, cascade = arrayOf(CascadeType.ALL))
     private val listSi: MutableList<Si> = mutableListOf()
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn("client_id")
+    @JoinColumn(name = "client_id")
     private val client: Client = _client
 
-    @Column("status")
+    @Column(name = "status")
     private val status: String = _status
 
-    @Column("name_of_file")
+    @Column(name = "name_of_file")
     private val nameOfFile: String = _nameOfFile
 
     fun getListSi(): List<Si> {

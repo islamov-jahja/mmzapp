@@ -14,29 +14,29 @@ class Si(_name: String,
          _note: String) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column("si_id")
+    @Column(name = "si_id")
     private val id: Long = 0
 
-    @Column("name", nullable = false)
+    @Column(name = "name", nullable = false)
     private val name = _name
 
-    @Column("description")
+    @Column(name = "description")
     private val description = _description
 
-    @Column("type")
+    @Column(name = "type")
     private val type: String = _type
 
-    @Column("factory_number")
+    @Column(name = "factory_number")
     private val factoryNumber: String = _factoryNubmer
 
     @NotNull
     @Column(name = "count", nullable = false)
     private val count: Int = _count
 
-    @Column("number_on_register")
+    @Column(name = "number_on_register")
     private val numberOnRegister: String = _numberOnRegister
 
-    @Column("note")
+    @Column(name = "note")
     private val note: String = _note
 
     fun toDTO(): Si{

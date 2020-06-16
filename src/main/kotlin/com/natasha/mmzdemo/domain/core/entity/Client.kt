@@ -40,39 +40,39 @@ class Client(_inn: String,
     @Column(name = "kpp", nullable = false)
     val kpp = _kpp
 
-    @Column("address", nullable = false)
+    @Column(name = "address", nullable = false)
     val address = _address
 
     @Column(name = "bic_client_bank", nullable = false)
     val bicClientBank = _bicClientBank
 
-    @Column("correspondent_account", nullable = false)
+    @Column(name = "correspondent_account", nullable = false)
     val correspondentAccount = _correspondentAccount
 
-    @Column("payment_account", nullable = false)
+    @Column(name = "payment_account", nullable = false)
     val paymentAccount = _paymentAccount
 
-    @Column("phone_client", nullable = false)
+    @Column(name = "phone_client", nullable = false)
     val phoneClient = _phoneClient
 
-    @Column("email_of_client", unique = true)
+    @Column(name = "email_of_client", unique = true)
     val emailOfClient = _emailOfClient
 
-    @Column("fio_director", nullable = false)
+    @Column(name = "fio_director", nullable = false)
     val fioDirector = _fioDirector
 
-    @Column("position_director", nullable = false)
+    @Column(name = "position_director", nullable = false)
     val positionDirector = _positionDirector
 
-    @Column("fio_contact_person", nullable = false)
+    @Column(name = "fio_contact_person", nullable = false)
     val fioContactPerson = _fioContactPerson
 
-    @Column("phone_contact_person", nullable = false)
+    @Column(name = "phone_contact_person", nullable = false)
     val phoneContactPerson = _phoneContactPerson
 
-    @Column("email_contact_person", nullable = false)
+    @Column(name = "email_contact_person", nullable = false)
     val emailContactPerson = _emailContactPerson
 
-    @Column("password", nullable = false)
+    @Column(name = "password", nullable = false)
     val password = _password
 }
