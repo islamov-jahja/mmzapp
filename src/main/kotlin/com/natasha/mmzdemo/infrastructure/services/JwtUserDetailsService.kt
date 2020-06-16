@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Component
 
 @Component
-class JwtUserDetailsService(@Autowired val clientRepository: ClientRepository, @Autowired val passwordProcessor: PasswordProcessor) : UserDetailsService {
+class JwtUserDetailsService(@Autowired val clientRepository: ClientRepository) : UserDetailsService {
     private val adminPosition: String = "adminOfServer"
 
     override fun loadUserByUsername(username: String?): UserDetails {

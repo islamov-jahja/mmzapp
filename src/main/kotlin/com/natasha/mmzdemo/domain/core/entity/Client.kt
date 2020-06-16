@@ -1,5 +1,7 @@
 package com.natasha.mmzdemo.domain.core.entity
 
+import com.natasha.mmzdemo.application.controllers.auth.dto.Client
+import com.natasha.mmzdemo.application.controllers.auth.dto.ContactPerson
 import javax.persistence.*
 
 @Entity(name = "client")
@@ -18,6 +20,11 @@ class Client(_inn: String,
              _fioContactPerson: String,
              _phoneContactPerson: String,
              _emailContactPerson: String) {
+
+    fun toDTO(): Client {
+        val contactPerson = ContactPerson(fioContactPerson, phoneContactPerson, emailContactPerson)
+        return Client(inn, name, kpp, address, bicClientBank, correspondentAccount, paymentAccount, phoneClient, emailOfClient, "", fioDirector, positionDirector, contactPerson)
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

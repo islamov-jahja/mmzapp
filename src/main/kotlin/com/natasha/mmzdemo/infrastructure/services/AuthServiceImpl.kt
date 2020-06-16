@@ -1,6 +1,7 @@
 package com.natasha.mmzdemo.infrastructure.services
 
 import com.natasha.mmzdemo.application.controllers.auth.dto.Client
+import com.natasha.mmzdemo.application.controllers.auth.exceptions.ClientNotFoundException
 import com.natasha.mmzdemo.domain.core.repositories.client.IClientRepository
 import com.natasha.mmzdemo.domain.core.services.AuthService
 import com.natasha.mmzdemo.infrastructure.helpers.PasswordProcessor
@@ -15,4 +16,13 @@ class AuthServiceImpl(@Autowired private val clientRepository: IClientRepository
         client.setPasswordHash(passwordHash)
         clientRepository.add(client.toEntity())
      }
+
+    override fun getClient(userName: String): Client {
+        val client = clientRepository.getByEmail(userName)
+        if (client == null){
+            throw ClientNotFoundException()
+        }
+
+        return client.toDTO()
+    }
 }
