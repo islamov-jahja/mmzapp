@@ -26,6 +26,7 @@ class JwtRequestFilter : OncePerRequestFilter() {
     private val jwtTokenUtil: JwtTokenUtil? = null
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
+        response.addHeader("Access-Control-Allow-Header", "Authorization, Content-Type")
         val requestTokenHeader = request.getHeader("Authorization")
 
         var username: String? = null
