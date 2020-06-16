@@ -1,12 +1,15 @@
 package com.natasha.mmzdemo.middleware.security
 
 import com.natasha.mmzdemo.infrastructure.helpers.JwtTokenUtil
+import com.natasha.mmzdemo.infrastructure.models.Role
 import com.natasha.mmzdemo.infrastructure.services.JwtUserDetailsService
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.SignatureException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
@@ -65,7 +68,9 @@ class JwtRequestFilter : OncePerRequestFilter() {
                     val usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.authorities)
 
-                    authenticatedUser.setUserName(username)
+                    authenticatedUser.userName = username
+                    authenticatedUser.role = getROle(userDetails)
+
                     usernamePasswordAuthenticationToken.details = WebAuthenticationDetailsSource().buildDetails(request)
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken)
                 }
@@ -73,5 +78,12 @@ class JwtRequestFilter : OncePerRequestFilter() {
         }
 
         filterChain.doFilter(request, response)
+    }
+
+    private fun getROle(userDetails: UserDetails): Role {
+        return when(val isAdmin = userDetails.authorities.contains(SimpleGrantedAuthority(Role.Admin.toString()))){
+            true -> Role.Admin
+            else -> Role.Client
+        }
     }
 }

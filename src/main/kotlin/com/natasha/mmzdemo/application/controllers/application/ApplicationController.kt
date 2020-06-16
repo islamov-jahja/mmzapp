@@ -19,7 +19,7 @@ class ApplicationController(@Autowired val applicationService: ApplicationServic
 
     @PostMapping("")
     fun createApplication(@RequestBody application: ApplicationRequest): ResponseEntity<Any>{
-        val userName = authenticatedUser.getUserName()
+        val userName = authenticatedUser.userName
         applicationService.createApplication(application, userName)
         return ResponseEntity.ok().build()
     }
@@ -32,7 +32,7 @@ class ApplicationController(@Autowired val applicationService: ApplicationServic
 
     @GetMapping("")
     fun getApplications(): ResponseEntity<List<ApplicationResponse>>{
-        val applicationsResponse = applicationService.getList()
+        val applicationsResponse = applicationService.getList(authenticatedUser)
         return ResponseEntity.ok().body(applicationsResponse)
     }
 }

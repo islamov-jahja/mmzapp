@@ -42,7 +42,7 @@ class AuthController (@Autowired val auth: AuthServiceImpl,
 
     @GetMapping("/info")
     fun info(): ResponseEntity<Client>{
-        val userName = authenticatedUser.getUserName()
+        val userName = authenticatedUser.userName
         val userDetails = userDetailsService.loadUserByUsername(userName)
         return ResponseEntity.ok().body(auth.getClient(userName))
     }
@@ -68,16 +68,9 @@ class AuthController (@Autowired val auth: AuthServiceImpl,
 
         val userDetails = userDetailsService.loadUserByUsername(authenticationRequest.username)
         val token = jwtTokenUtil.generateToken(userDetails)
-        val jsonResponse: JWTResponse = JWTResponse(token.toString(), getROle(userDetails))
+        val jsonResponse: JWTResponse = JWTResponse(token.toString(), authenticatedUser.role)
         println("f")
         return ResponseEntity.ok(jsonResponse)
-    }
-
-    private fun getROle(userDetails: UserDetails): Role{
-        return when(val isAdmin = userDetails.authorities.contains(SimpleGrantedAuthority(Role.Admin.toString()))){
-            true -> Role.Admin
-            else -> Role.Client
-        }
     }
 
     private fun authenticate(username: String, password: String) {

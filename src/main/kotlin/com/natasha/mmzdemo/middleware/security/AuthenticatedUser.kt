@@ -1,15 +1,10 @@
 package com.natasha.mmzdemo.middleware.security
 
+import com.natasha.mmzdemo.infrastructure.models.Role
 import org.springframework.stereotype.Component
 
 @Component
 class AuthenticatedUser {
-    private var userName: String = ""
-    fun setUserName(_userName: String){
-        userName = _userName
-    }
-
-    fun getUserName(): String{
-        return userName
-    }
+    lateinit var userName: String
+    lateinit var role: Role
 }

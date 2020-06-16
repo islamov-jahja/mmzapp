@@ -8,8 +8,10 @@ import com.natasha.mmzdemo.application.controllers.application.exceptions.ListSi
 import com.natasha.mmzdemo.domain.core.entity.Application
 import com.natasha.mmzdemo.domain.core.enums.ApplicationStatus
 import com.natasha.mmzdemo.domain.core.services.ApplicationService
+import com.natasha.mmzdemo.infrastructure.models.Role
 import com.natasha.mmzdemo.infrastructure.repositories.ApplicationRepository
 import com.natasha.mmzdemo.infrastructure.repositories.ClientRepository
+import com.natasha.mmzdemo.middleware.security.AuthenticatedUser
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.util.*
@@ -47,10 +49,17 @@ class ApplicationServiceImpl(@Autowired private val applicationRepository: Appli
         return listSi
     }
 
-    override fun getList(): List<ApplicationResponse> {
+    override fun getList(authenticatedUser: AuthenticatedUser): List<ApplicationResponse> {
         val listApplication: MutableList<ApplicationResponse> = mutableListOf()
         try {
-            val listApplicationEntities = applicationRepository.getList()
+            val listApplicationEntities = when(authenticatedUser.role){
+                Role.Admin -> applicationRepository.getList()
+                else -> {
+                    val client = clientRepository.getByEmail(authenticatedUser.userName)
+                    applicationRepository.getByClient(client)
+                }
+            }
+
             for(application in listApplicationEntities){
                 listApplication.add(application.toApplicationResponse())
             }
