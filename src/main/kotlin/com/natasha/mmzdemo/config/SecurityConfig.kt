@@ -49,7 +49,7 @@ class SecurityConfig() : WebSecurityConfigurerAdapter() {
     protected override fun configure(http: HttpSecurity?) {
         if (http != null) {
             http.cors().and().csrf().disable().authorizeRequests()
-                    .antMatchers(HttpMethod.OPTIONS, "/api/auth/reg").anonymous()
+                    .antMatchers(HttpMethod.OPTIONS, "/**").anonymous()
                     .antMatchers(HttpMethod.POST,"/api/auth/reg").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/auth/login").anonymous()
                     .antMatchers(HttpMethod.GET, "/api/auth/info", "/application", "/application/{id}/listSi").authenticated()
@@ -67,7 +67,7 @@ class SecurityConfig() : WebSecurityConfigurerAdapter() {
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource? {
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = Arrays.asList("http://r927888i.beget.tech")
+        configuration.allowedOrigins = Arrays.asList("*")
         configuration.allowedMethods = Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
