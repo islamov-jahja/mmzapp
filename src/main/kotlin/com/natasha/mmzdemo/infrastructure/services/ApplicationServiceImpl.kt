@@ -8,6 +8,7 @@ import com.natasha.mmzdemo.application.controllers.application.exceptions.ListSi
 import com.natasha.mmzdemo.domain.core.entity.Application
 import com.natasha.mmzdemo.domain.core.enums.ApplicationStatus
 import com.natasha.mmzdemo.domain.core.services.ApplicationService
+import com.natasha.mmzdemo.infrastructure.helpers.ApplicationDocxGenerator
 import com.natasha.mmzdemo.infrastructure.models.Role
 import com.natasha.mmzdemo.infrastructure.repositories.ApplicationRepository
 import com.natasha.mmzdemo.infrastructure.repositories.ClientRepository
@@ -19,9 +20,18 @@ import java.util.*
 @Component
 class ApplicationServiceImpl(@Autowired private val applicationRepository: ApplicationRepository,
                              @Autowired private val clientRepository: ClientRepository) : ApplicationService {
+
+    @Autowired
+    private val applicationDocxGenerator: ApplicationDocxGenerator? = null
+
     override fun createApplication(application: ApplicationRequest, userName: String) {
         val client = clientRepository.getByEmail(userName)
-        val fileName = "${client.emailOfClient} + ${client.hashCode()}.docx"
+        val fileName = "https://mmnewapp.herokuapp.com/"+UUID.randomUUID().toString() + ".docx"
+
+        if (applicationDocxGenerator != null) {
+            applicationDocxGenerator.generate(application.listSi, Date(), fileName)
+        }
+
         val app = Application(Date(), client, ApplicationStatus.Created.toString(), fileName)
 
         for (si in application.listSi){
