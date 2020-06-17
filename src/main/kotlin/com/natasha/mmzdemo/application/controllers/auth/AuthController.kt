@@ -68,7 +68,7 @@ class AuthController (@Autowired val auth: AuthServiceImpl,
 
         val userDetails = userDetailsService.loadUserByUsername(authenticationRequest.username)
         val token = jwtTokenUtil.generateToken(userDetails)
-        val jsonResponse: JWTResponse = JWTResponse(token.toString(), authenticatedUser.role)
+        val jsonResponse: JWTResponse = JWTResponse(token.toString(), getROle(userDetails))
         println("f")
         return ResponseEntity.ok(jsonResponse)
     }
@@ -80,6 +80,13 @@ class AuthController (@Autowired val auth: AuthServiceImpl,
             throw Exception("USER_DISABLED", e);
         } catch (e: BadCredentialsException) {
             throw Exception("INVALID_CREDENTIALS", e);
+        }
+    }
+
+    private fun getROle(userDetails: UserDetails): Role {
+        return when(val isAdmin = userDetails.authorities.contains(SimpleGrantedAuthority(Role.Admin.toString()))){
+            true -> Role.Admin
+            else -> Role.Client
         }
     }
 }
