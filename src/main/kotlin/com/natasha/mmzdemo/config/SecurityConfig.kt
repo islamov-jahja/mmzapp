@@ -48,7 +48,7 @@ class SecurityConfig() : WebSecurityConfigurerAdapter() {
     @Override
     protected override fun configure(http: HttpSecurity?) {
         if (http != null) {
-            http.cors().and().csrf().disable().authorizeRequests()
+            http.cors().disable().csrf().disable().authorizeRequests()
                     .antMatchers(HttpMethod.POST,"/api/auth/reg").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/auth/login").anonymous()
                     .antMatchers(HttpMethod.GET, "/api/auth/info", "/application", "/application/{id}/listSi").authenticated()

@@ -28,9 +28,7 @@ class ApplicationServiceImpl(@Autowired private val applicationRepository: Appli
         val client = clientRepository.getByEmail(userName)
         val fileName = UUID.randomUUID().toString() + ".docx"
 
-        if (applicationDocxGenerator != null) {
-            applicationDocxGenerator.generate(application.listSi, Date(), fileName)
-        }
+        applicationDocxGenerator?.generate(application.listSi, Date(), fileName)
 
         val app = Application(Date(), client, ApplicationStatus.Created.toString(), fileName)
 
