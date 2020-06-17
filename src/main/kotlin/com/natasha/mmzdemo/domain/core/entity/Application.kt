@@ -41,6 +41,6 @@ class Application(_date: Date,
     }
 
     fun toApplicationResponse(): ApplicationResponse{
-        return ApplicationResponse(id, createdDate, nameOfFile)
+        return ApplicationResponse(id, createdDate, "https://mmnewapp.herokuapp.com/$nameOfFile")
     }
 }

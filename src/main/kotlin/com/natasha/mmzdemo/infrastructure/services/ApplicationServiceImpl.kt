@@ -26,7 +26,7 @@ class ApplicationServiceImpl(@Autowired private val applicationRepository: Appli
 
     override fun createApplication(application: ApplicationRequest, userName: String) {
         val client = clientRepository.getByEmail(userName)
-        val fileName = "https://mmnewapp.herokuapp.com/"+UUID.randomUUID().toString() + ".docx"
+        val fileName = UUID.randomUUID().toString() + ".docx"
 
         if (applicationDocxGenerator != null) {
             applicationDocxGenerator.generate(application.listSi, Date(), fileName)
