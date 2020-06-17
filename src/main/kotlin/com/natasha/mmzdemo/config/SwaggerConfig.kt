@@ -21,15 +21,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 @EnableSwagger2
 class SwaggerConfig {
     @Bean
-    fun corsConfigurer(): WebMvcConfigurer? {
-        return object : WebMvcConfigurerAdapter() {
-            override fun addCorsMappings(registry: CorsRegistry) {
-                registry.addMapping("/**")
-            }
-        }
-    }
-
-    @Bean
     fun api(): Docket {
         return Docket(DocumentationType.SWAGGER_2)
                 .select()
