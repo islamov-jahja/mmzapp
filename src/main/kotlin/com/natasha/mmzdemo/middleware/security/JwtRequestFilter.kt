@@ -34,7 +34,7 @@ class JwtRequestFilter : OncePerRequestFilter() {
         response.addHeader("Access-Control-Allow-Header", "X-Requested-With, Access-Control-Allow-Headers, Access-Control-Request-Method, Content-Type, Accept, Origin, Authorization")
         response.addHeader("Access-Control-Max-Age", "3600")
         response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
-        response.addHeader("Access-Control-Allow-Origin", "http://r927888i.beget.tech")
+        response.addHeader("Access-Control-Allow-Origin", "*")
 
         val requestTokenHeader = request.getHeader("Authorization")
 
