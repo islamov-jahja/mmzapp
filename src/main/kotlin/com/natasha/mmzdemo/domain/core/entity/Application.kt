@@ -41,6 +41,11 @@ class Application(_date: Date,
     }
 
     fun toApplicationResponse(): ApplicationResponse{
-        return ApplicationResponse(id, createdDate, "https://mmnewapp.herokuapp.com/$nameOfFile")
+        val newStatus = when(status){
+            "Created" -> ApplicationStatus.Created
+            else -> ApplicationStatus.Created
+        }
+
+        return ApplicationResponse(id, createdDate, "https://mmnewapp.herokuapp.com/$nameOfFile", newStatus)
     }
 }
