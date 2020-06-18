@@ -41,6 +41,12 @@ class AuthController (@Autowired val auth: AuthServiceImpl,
     @Autowired
     private var authenticatedUser: AuthenticatedUser = AuthenticatedUser()
 
+    @GetMapping("/client/{id}")
+    fun getClient(@PathVariable id: Long): ResponseEntity<Client>{
+        val client = auth.getClient(id)
+        return ResponseEntity.ok(client)
+    }
+
     @GetMapping("/info")
     fun info(): ResponseEntity<Client>{
         val userName = authenticatedUser.userName

@@ -46,6 +46,6 @@ class Application(_date: Date,
             else -> ApplicationStatus.Created
         }
 
-        return ApplicationResponse(id, createdDate, "https://mmnewapp.herokuapp.com/$nameOfFile", newStatus)
+        return ApplicationResponse(id, client.id.toLong(), createdDate, "https://mmnewapp.herokuapp.com/$nameOfFile", newStatus)
     }
 }

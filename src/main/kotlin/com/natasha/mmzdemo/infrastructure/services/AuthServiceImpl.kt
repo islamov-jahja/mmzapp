@@ -18,10 +18,13 @@ class AuthServiceImpl(@Autowired private val clientRepository: IClientRepository
      }
 
     override fun getClient(userName: String): Client {
-        val client = clientRepository.getByEmail(userName)
-        if (client == null){
-            throw ClientNotFoundException()
-        }
+        val client = clientRepository.getByEmail(userName) ?: throw ClientNotFoundException()
+
+        return client.toDTO()
+    }
+
+    override fun getClient(id: Long): Client {
+        val client = clientRepository.getById(id) ?: throw ClientNotFoundException();
 
         return client.toDTO()
     }
