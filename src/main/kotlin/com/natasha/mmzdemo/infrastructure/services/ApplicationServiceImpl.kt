@@ -26,9 +26,7 @@ class ApplicationServiceImpl(@Autowired private val applicationRepository: Appli
 
     override fun createApplication(application: ApplicationRequest, userName: String) {
         val client = clientRepository.getByEmail(userName)
-        val fileName = UUID.randomUUID().toString() + ".docx"
-
-        applicationDocxGenerator?.generate(application.listSi, Date(), fileName)
+        val fileName = generateApplicationFile(application)
 
         val app = Application(Date(), client, ApplicationStatus.Created.toString(), fileName)
 
@@ -44,12 +42,21 @@ class ApplicationServiceImpl(@Autowired private val applicationRepository: Appli
         val applicationEntity = applicationRepository.getById(id)
         applicationEntity.clearList()
 
+        val fileName = generateApplicationFile(application)
+        applicationEntity.setFileName(fileName)
+
         for(si in application.listSi){
             val siEntity = com.natasha.mmzdemo.domain.core.entity.Si(si.name, si.description, si.type, si.factoryNumber, si.count, si.numberOnRegister, si.note)
             applicationEntity.addSi(siEntity)
         }
 
         applicationRepository.save(applicationEntity)
+    }
+
+    fun generateApplicationFile(application: ApplicationRequest): String{
+        val fileName = UUID.randomUUID().toString() + ".docx"
+        applicationDocxGenerator?.generate(application.listSi, Date(), fileName)
+        return fileName
     }
 
     override fun getListOfSi(applicationId: Long): List<Si> {

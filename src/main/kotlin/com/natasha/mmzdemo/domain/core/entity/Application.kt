@@ -34,10 +34,14 @@ class Application(_date: Date,
     private val status: String = _status
 
     @Column(name = "name_of_file")
-    private val nameOfFile: String = _nameOfFile
+    private var nameOfFile: String = _nameOfFile
 
     fun getListSi(): List<Si> {
         return listSi.toList()
+    }
+
+    fun setFileName(_fileName: String){
+        nameOfFile = _fileName
     }
 
     fun clearList(){
