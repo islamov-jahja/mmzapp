@@ -36,7 +36,7 @@ class JwtRequestFilter : OncePerRequestFilter() {
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
-
+        println("ferfer32423")
         val requestTokenHeader = request.getHeader("Authorization")
 
         var username: String? = null
