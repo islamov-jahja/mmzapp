@@ -17,7 +17,7 @@ class ApplicationControllerAdvice {
 
     @ExceptionHandler(value = [InvalidApplicationStatus::class])
     fun invalidApplicationStatus() :ResponseEntity<ErrorResponse>{
-        val error = ErrorResponse(2, "Стастус заявки не предполагает данную операци")
+        val error = ErrorResponse(2, "Стастус заявки не предполагает данную операцию")
         return ResponseEntity.status(400).body(error)
     }
 }

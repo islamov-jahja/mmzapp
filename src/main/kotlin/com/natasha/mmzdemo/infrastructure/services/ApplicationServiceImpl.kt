@@ -2,8 +2,10 @@ package com.natasha.mmzdemo.infrastructure.services
 
 import com.natasha.mmzdemo.application.controllers.application.dto.ApplicationRequest
 import com.natasha.mmzdemo.application.controllers.application.dto.ApplicationResponse
+import com.natasha.mmzdemo.application.controllers.application.dto.DeniedMessage
 import com.natasha.mmzdemo.application.controllers.application.dto.Si
 import com.natasha.mmzdemo.application.controllers.application.exceptions.ApplicationNotFoundException
+import com.natasha.mmzdemo.application.controllers.application.exceptions.InvalidApplicationStatus
 import com.natasha.mmzdemo.application.controllers.application.exceptions.ListSiNotForApplicationNotFound
 import com.natasha.mmzdemo.application.controllers.auth.exceptions.ClientNotFoundException
 import com.natasha.mmzdemo.domain.core.entity.Application
@@ -29,7 +31,7 @@ class ApplicationServiceImpl(@Autowired private val applicationRepository: Appli
         val client = clientRepository.getByEmail(userName) ?: throw ClientNotFoundException()
         val fileName = generateApplicationFile(application)
 
-        val app = Application(Date(), client, ApplicationStatus.Created, fileName)
+        val app = Application(Date(), client, ApplicationStatus.Created, fileName, null)
 
         for (si in application.listSi){
             val siEntity = com.natasha.mmzdemo.domain.core.entity.Si(si.name, si.description, si.type, si.factoryNumber, si.count, si.numberOnRegister, si.note)
@@ -52,6 +54,21 @@ class ApplicationServiceImpl(@Autowired private val applicationRepository: Appli
         }
 
         applicationRepository.save(applicationEntity)
+    }
+
+    override fun denyApplication(deniedMessage: DeniedMessage, id: Long) {
+        val application = applicationRepository.getById(id);
+        if (application == null){
+            throw ApplicationNotFoundException()
+        }
+
+        if (application.getStatus() >= ApplicationStatus.SuccessfulPaid){
+            throw InvalidApplicationStatus()
+        }
+
+        application.setStatus(ApplicationStatus.Denied)
+        application.deniedMessage = deniedMessage.toEntity()
+        applicationRepository.save(application)
     }
 
     fun generateApplicationFile(application: ApplicationRequest): String{

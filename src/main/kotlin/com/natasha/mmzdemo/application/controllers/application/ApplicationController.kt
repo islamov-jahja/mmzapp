@@ -2,13 +2,16 @@ package com.natasha.mmzdemo.application.controllers.application
 
 import com.natasha.mmzdemo.application.controllers.application.dto.ApplicationRequest
 import com.natasha.mmzdemo.application.controllers.application.dto.ApplicationResponse
+import com.natasha.mmzdemo.application.controllers.application.dto.DeniedMessage
 import com.natasha.mmzdemo.application.controllers.application.dto.Si
 import com.natasha.mmzdemo.domain.core.services.ApplicationService
 import com.natasha.mmzdemo.middleware.security.AuthenticatedUser
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.RequestEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import springfox.documentation.swagger2.annotations.EnableSwagger2
+import java.util.*
 
 @CrossOrigin(origins = arrayOf("*"))
 @RestController
@@ -41,5 +44,11 @@ class ApplicationController(@Autowired val applicationService: ApplicationServic
     fun getApplications(): ResponseEntity<List<ApplicationResponse>>{
         val applicationsResponse = applicationService.getList(authenticatedUser)
         return ResponseEntity.ok().body(applicationsResponse)
+    }
+
+    @PostMapping("/{id}/deny")
+    fun denyApplication(@PathVariable id: Long, @RequestBody denyMessage: String): ResponseEntity<Any>{
+        applicationService.denyApplication(DeniedMessage(denyMessage, Date()), id)
+        return ResponseEntity.ok().build()
     }
 }

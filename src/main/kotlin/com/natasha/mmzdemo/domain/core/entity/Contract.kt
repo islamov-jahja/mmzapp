@@ -8,7 +8,6 @@ import javax.persistence.*
 class Contract(_status: ContractStatus, _mainFileName: String) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "contract_id")
     val id: Long = 0
 
     @Column(name = "status")

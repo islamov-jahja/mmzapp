@@ -9,7 +9,8 @@ import javax.persistence.*
 class Application(_date: Date,
                   _client: Client,
                   _status: ApplicationStatus,
-                  _nameOfFile: String) {
+                  _nameOfFile: String,
+                  _deniedMessage: DeniedMessage?) {
 
     fun addSi(si: Si) {
         listSi.add(si)
@@ -17,7 +18,6 @@ class Application(_date: Date,
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "application_id")
     val id: Long = 0
 
     @Column(name = "created_date")
@@ -38,6 +38,10 @@ class Application(_date: Date,
 
     @Column(name = "name_of_file")
     private var nameOfFile: String = _nameOfFile
+
+    @OneToOne(cascade = arrayOf(CascadeType.ALL))
+    @JoinColumn(name= "denied_message_id")
+    var deniedMessage: DeniedMessage? = _deniedMessage
 
     fun setContract(_contract: Contract){
         contracts.clear()
@@ -61,12 +65,7 @@ class Application(_date: Date,
     }
 
     fun toApplicationResponse(): ApplicationResponse{
-        val newStatus = when(status){
-            "Created" -> ApplicationStatus.Created
-            else -> ApplicationStatus.Created
-        }
-
-        return ApplicationResponse(id, client.id.toLong(), createdDate, "https://mmnewapp.herokuapp.com/$nameOfFile", newStatus)
+        return ApplicationResponse(id, client.id.toLong(), createdDate, "https://mmnewapp.herokuapp.com/$nameOfFile", deniedMessage?.toDTO(), getStatus())
     }
 
     fun setStatus(_status: ApplicationStatus) {

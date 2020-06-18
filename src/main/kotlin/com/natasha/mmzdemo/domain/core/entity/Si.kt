@@ -14,7 +14,6 @@ class Si(_name: String,
          _note: String) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "si_id")
     private val id: Long = 0
 
     @Column(name = "name", nullable = false)

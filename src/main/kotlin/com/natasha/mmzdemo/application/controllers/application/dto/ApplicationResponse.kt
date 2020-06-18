@@ -7,5 +7,6 @@ data class ApplicationResponse(val id: Long,
                                val clientId: Long,
                                val createdDate: Date,
                                val nameOfFile: String,
+                               val deniedmessage: DeniedMessage?,
                                val status: ApplicationStatus) {
 }

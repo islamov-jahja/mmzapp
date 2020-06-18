@@ -6,7 +6,6 @@ import javax.persistence.*
 class PathToContract(_path: String) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "path_to_contract_id")
     val id: Long = 0
 
     @Column(name = "path")
