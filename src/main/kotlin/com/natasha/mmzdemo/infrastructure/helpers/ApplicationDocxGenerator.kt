@@ -10,7 +10,7 @@ import java.util.*
 
 
 @Component
-class ApplicationDocxGenerator(@Value("./resources/f1.docx") _inputPath: String, @Value("./resources/") _outPath: String) : DocumentGenerator(_inputPath, _outPath) {
+class ApplicationDocxGenerator(@Value("./resources/f1.docx") _inputPath: String, @Value("./public/") _outPath: String) : DocumentGenerator(_inputPath, _outPath) {
     fun generate(listSi: List<Si>, date: Date, nameOfFile: String): XWPFDocument {
         var table = docxFile.tables[0]
         var number: Int = 1
