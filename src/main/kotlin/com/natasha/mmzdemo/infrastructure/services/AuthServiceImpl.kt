@@ -25,7 +25,6 @@ class AuthServiceImpl(@Autowired private val clientRepository: IClientRepository
 
     override fun getClient(id: Long): Client {
         val client = clientRepository.getById(id) ?: throw ClientNotFoundException();
-
         return client.toDTO()
     }
 }
