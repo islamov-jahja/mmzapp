@@ -10,8 +10,9 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import springfox.documentation.swagger2.annotations.EnableSwagger2
 
+@CrossOrigin(origins = arrayOf("*"))
 @RestController
-@RequestMapping("/application")
+@RequestMapping("/api/application")
 @EnableSwagger2
 class ApplicationController(@Autowired val applicationService: ApplicationService) {
     @Autowired

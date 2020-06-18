@@ -70,7 +70,6 @@ class AuthController (@Autowired val auth: AuthServiceImpl,
         val userDetails = userDetailsService.loadUserByUsername(authenticationRequest.username)
         val token = jwtTokenUtil.generateToken(userDetails)
         val jsonResponse: JWTResponse = JWTResponse(token.toString(), getROle(userDetails))
-        println("f")
         return ResponseEntity.ok(jsonResponse)
     }
 
