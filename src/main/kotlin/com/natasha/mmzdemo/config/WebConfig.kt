@@ -14,5 +14,6 @@ class WebConfig : WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("*")
                 .allowedMethods("*")
+                .allowedHeaders("Access-Control-Allow-Origin")
     }
 }
