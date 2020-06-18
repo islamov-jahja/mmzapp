@@ -11,7 +11,7 @@ import java.util.*
 
 @Component
 class ApplicationDocxGenerator(@Value("./resources/f1.docx") _inputPath: String, @Value("./public/") _outPath: String) : DocumentGenerator(_inputPath, _outPath) {
-    fun generate(listSi: List<Si>, date: Date, nameOfFile: String): XWPFDocument {
+    fun generate(listSi: List<Si>, date: Date, nameOfFile: String) {
         var table = docxFile.tables[0]
         var number: Int = 1
         for (si in listSi){
@@ -27,24 +27,9 @@ class ApplicationDocxGenerator(@Value("./resources/f1.docx") _inputPath: String,
             number++
         }
 
-        for (p in docxFile.paragraphs) {
-            val runs = p.runs
-            if (runs != null) {
-                for (r in runs) {
-                    var text = r.getText(0)
-                    println(text)
-                    if (text != null && text.contains("dateTime")) {
-                        text = text.replace("dateTime", dateFormat.format(date))
-                        r.setText(text, 0)
-                    }
-                }
-            }
-        }
 
-        outputStream = FileOutputStream(outputPath + nameOfFile)
-        docxFile.write(outputStream)
+        replaceTextOnDocument(docxFile, "dateTime", dateFormat.format(date))
 
-        outputStream.close()
-        return docxFile
+        super.generate(nameOfFile)
     }
 }

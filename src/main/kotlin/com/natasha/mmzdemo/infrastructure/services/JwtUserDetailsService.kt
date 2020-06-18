@@ -1,5 +1,6 @@
 package com.natasha.mmzdemo.infrastructure.services
 
+import com.natasha.mmzdemo.application.controllers.auth.exceptions.ClientNotFoundException
 import com.natasha.mmzdemo.infrastructure.helpers.PasswordProcessor
 import com.natasha.mmzdemo.infrastructure.models.Role
 import com.natasha.mmzdemo.infrastructure.models.UserDetailsImpl
@@ -21,8 +22,8 @@ class JwtUserDetailsService(@Autowired val clientRepository: ClientRepository) :
             throw UsernameNotFoundException(username)
         }
 
-        val client = username.let { clientRepository.getByEmail(it) }
-
+        val client = username.let { clientRepository.getByEmail(it) } ?: throw ClientNotFoundException()
+        
         if (client.positionDirector == adminPosition){
             return UserDetailsImpl(client.emailOfClient, client.password, mutableListOf<GrantedAuthority>(SimpleGrantedAuthority(Role.Admin.toString())))
         }

@@ -8,7 +8,7 @@ import javax.persistence.*
 @Entity(name = "application")
 class Application(_date: Date,
                   _client: Client,
-                  _status: String,
+                  _status: ApplicationStatus,
                   _nameOfFile: String) {
 
     fun addSi(si: Si) {
@@ -26,15 +26,27 @@ class Application(_date: Date,
     @OneToMany(fetch = FetchType.EAGER, cascade = arrayOf(CascadeType.ALL))
     private val listSi: MutableList<Si> = mutableListOf()
 
+    @OneToMany
+    private var contracts: MutableList<Contract> = mutableListOf()
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
-    private val client: Client = _client
+    val client: Client = _client
 
     @Column(name = "status")
-    private val status: String = _status
+    private val status: String = _status.toString()
 
     @Column(name = "name_of_file")
     private var nameOfFile: String = _nameOfFile
+
+    fun setContract(_contract: Contract){
+        contracts.clear()
+        contracts.add(_contract)
+    }
+
+    fun getContract(): Contract?{
+        return contracts[0]
+    }
 
     fun getListSi(): List<Si> {
         return listSi.toList()

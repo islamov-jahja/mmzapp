@@ -5,6 +5,7 @@ import com.natasha.mmzdemo.application.controllers.application.dto.ApplicationRe
 import com.natasha.mmzdemo.application.controllers.application.dto.Si
 import com.natasha.mmzdemo.application.controllers.application.exceptions.ApplicationNotFoundException
 import com.natasha.mmzdemo.application.controllers.application.exceptions.ListSiNotForApplicationNotFound
+import com.natasha.mmzdemo.application.controllers.auth.exceptions.ClientNotFoundException
 import com.natasha.mmzdemo.domain.core.entity.Application
 import com.natasha.mmzdemo.domain.core.enums.ApplicationStatus
 import com.natasha.mmzdemo.domain.core.services.ApplicationService
@@ -25,10 +26,10 @@ class ApplicationServiceImpl(@Autowired private val applicationRepository: Appli
     private val applicationDocxGenerator: ApplicationDocxGenerator? = null
 
     override fun createApplication(application: ApplicationRequest, userName: String) {
-        val client = clientRepository.getByEmail(userName)
+        val client = clientRepository.getByEmail(userName) ?: throw ClientNotFoundException()
         val fileName = generateApplicationFile(application)
 
-        val app = Application(Date(), client, ApplicationStatus.Created.toString(), fileName)
+        val app = Application(Date(), client, ApplicationStatus.Created, fileName)
 
         for (si in application.listSi){
             val siEntity = com.natasha.mmzdemo.domain.core.entity.Si(si.name, si.description, si.type, si.factoryNumber, si.count, si.numberOnRegister, si.note)
@@ -82,7 +83,7 @@ class ApplicationServiceImpl(@Autowired private val applicationRepository: Appli
             val listApplicationEntities = when(authenticatedUser.role){
                 Role.Admin -> applicationRepository.getList()
                 else -> {
-                    val client = clientRepository.getByEmail(authenticatedUser.userName)
+                    val client = clientRepository.getByEmail(authenticatedUser.userName) ?: throw ClientNotFoundException()
                     applicationRepository.getByClient(client)
                 }
             }

@@ -8,7 +8,7 @@ import javax.persistence.*
 class Si(_name: String,
          _description: String,
          _type: String,
-         _factoryNubmer: String,
+         _factoryNumber: String,
          _count: Int,
          _numberOnRegister: String,
          _note: String) {
@@ -27,7 +27,7 @@ class Si(_name: String,
     private val type: String = _type
 
     @Column(name = "factory_number")
-    private val factoryNumber: String = _factoryNubmer
+    private val factoryNumber: String = _factoryNumber
 
     @NotNull
     @Column(name = "count", nullable = false)

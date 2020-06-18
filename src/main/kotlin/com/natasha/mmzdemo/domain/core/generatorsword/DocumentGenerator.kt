@@ -27,4 +27,27 @@ abstract class DocumentGenerator(_inputPath: String, _outputPath: String) {
     fun onDestroy(){
         outputStream.close()
     }
+
+    fun replaceTextOnDocument(document: XWPFDocument, searchText: String, replaceText: String){
+        for (p in docxFile.paragraphs) {
+            val runs = p.runs
+            if (runs != null) {
+                for (r in runs) {
+                    var text = r.getText(0)
+                    println(text)
+                    if (text != null && text.contains(searchText)) {
+                        text = text.replace(searchText, replaceText)
+                        r.setText(text, 0)
+                    }
+                }
+            }
+        }
+    }
+
+    fun generate(nameOfFile: String){
+        outputStream = FileOutputStream(outputPath + nameOfFile)
+        docxFile.write(outputStream)
+
+        outputStream.close()
+    }
 }
