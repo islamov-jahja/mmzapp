@@ -1,8 +1,10 @@
 package com.natasha.mmzdemo.infrastructure.services
 
+import com.natasha.mmzdemo.application.controllers.application.exceptions.InvalidApplicationStatus
 import com.natasha.mmzdemo.application.controllers.contract.exceptions.WrongClientException
 import com.natasha.mmzdemo.domain.core.entity.Contract
 import com.natasha.mmzdemo.domain.core.entity.PathToContract
+import com.natasha.mmzdemo.domain.core.enums.ApplicationStatus
 import com.natasha.mmzdemo.domain.core.enums.ContractStatus
 import com.natasha.mmzdemo.domain.core.services.ContractService
 import com.natasha.mmzdemo.infrastructure.helpers.ApplicationDocxGenerator
@@ -24,6 +26,10 @@ class ContractServiceImpl(@Autowired private val authenticatedUser: Authenticate
     override fun createContract(applicationId: Long) {
         throwExceptionIfWrongClient(applicationId)
         val application = applicationRepository.getById(applicationId)
+        if (application.getStatus() != ApplicationStatus.Created){
+            throw InvalidApplicationStatus()
+        }
+
         val client = application.client
         val fileName = UUID.randomUUID().toString() + ".docx"
 
@@ -31,6 +37,7 @@ class ContractServiceImpl(@Autowired private val authenticatedUser: Authenticate
         contract.addPath(PathToContract(fileName))
         application.setContract(contract)
         contractDocxGenerator?.generate(client, fileName)
+        application.setStatus(ApplicationStatus.Contract)
         applicationRepository.save(application)
     }
 

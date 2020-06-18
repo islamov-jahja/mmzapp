@@ -34,7 +34,7 @@ class Application(_date: Date,
     val client: Client = _client
 
     @Column(name = "status")
-    private val status: String = _status.toString()
+    private var status: String = _status.toString()
 
     @Column(name = "name_of_file")
     private var nameOfFile: String = _nameOfFile
@@ -67,5 +67,19 @@ class Application(_date: Date,
         }
 
         return ApplicationResponse(id, client.id.toLong(), createdDate, "https://mmnewapp.herokuapp.com/$nameOfFile", newStatus)
+    }
+
+    fun setStatus(_status: ApplicationStatus) {
+        status = _status.toString()
+    }
+
+    fun getStatus(): ApplicationStatus{
+        return when(status){
+            ApplicationStatus.Created.toString() -> ApplicationStatus.Created
+            ApplicationStatus.Contract.toString() -> ApplicationStatus.Contract
+            ApplicationStatus.Closed.toString() -> ApplicationStatus.Closed
+            ApplicationStatus.Denied.toString() -> ApplicationStatus.Denied
+            else -> ApplicationStatus.Closed
+        }
     }
 }
