@@ -49,14 +49,13 @@ class SecurityConfig() : WebSecurityConfigurerAdapter() {
 
     @Override
     protected override fun configure(http: HttpSecurity?) {
-        println("try security")
         if (http != null) {
             http.cors().and().csrf().disable().authorizeRequests()
-                    .antMatchers(HttpMethod.POST,"/api/auth/reg").permitAll()
-                    .antMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/auth/info", "/application", "/application/{id}/listSi").permitAll()
+                    .antMatchers(HttpMethod.POST,"/api/auth/reg").anonymous()
+                    .antMatchers(HttpMethod.POST, "/api/auth/login").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/auth/info", "/application", "/application/{id}/listSi").authenticated()
                     .antMatchers(HttpMethod.POST, "/application").hasAuthority(Role.Client.toString())
-                    .anyRequest().permitAll()
+                    .anyRequest().anonymous()
                     .and()
                     .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
