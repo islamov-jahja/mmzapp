@@ -47,7 +47,6 @@ class SecurityConfig() : WebSecurityConfigurerAdapter() {
 
     @Override
     protected override fun configure(http: HttpSecurity?) {
-        println("cors, cros")
         if (http != null) {
             http.cors().and().csrf().disable().authorizeRequests()
                     .antMatchers(HttpMethod.POST,"/api/auth/reg").anonymous()
@@ -66,7 +65,7 @@ class SecurityConfig() : WebSecurityConfigurerAdapter() {
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource? {
         val source = UrlBasedCorsConfigurationSource()
-        source.registerCorsConfiguration("/**", CorsConfiguration().applyPermitDefaultValues())
+        source.registerCorsConfiguration("/api/**", CorsConfiguration().applyPermitDefaultValues())
         return source
     }
 
