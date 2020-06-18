@@ -86,14 +86,4 @@ class SecurityConfig() : WebSecurityConfigurerAdapter() {
     fun configureGlobal(auth: AuthenticationManagerBuilder) {
         auth.userDetailsService<UserDetailsService>(jwtUserDetailsService).passwordEncoder(passwordEncoder())
     }
-
-    @Bean
-    fun corsConfigurer(): WebMvcConfigurer? {
-        return object : WebMvcConfigurer {
-            override fun addCorsMappings(registry: CorsRegistry) {
-                registry.addMapping("/**")
-                        .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH")
-            }
-        }
-    }
 }
