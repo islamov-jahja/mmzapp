@@ -21,8 +21,6 @@ import org.springframework.stereotype.Component
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
-import org.springframework.web.servlet.config.annotation.CorsRegistry
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import java.util.*
 
 
@@ -65,14 +63,10 @@ class SecurityConfig() : WebSecurityConfigurerAdapter() {
         }
     }
 
-
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource? {
-        val configuration = CorsConfiguration()
-        configuration.allowedOrigins = Arrays.asList("*")
-        configuration.allowedMethods = Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")
         val source = UrlBasedCorsConfigurationSource()
-        source.registerCorsConfiguration("/**", configuration)
+        source.registerCorsConfiguration("/**", CorsConfiguration().applyPermitDefaultValues())
         return source
     }
 
