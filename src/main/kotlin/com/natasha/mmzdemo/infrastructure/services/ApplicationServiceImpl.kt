@@ -37,7 +37,19 @@ class ApplicationServiceImpl(@Autowired private val applicationRepository: Appli
             app.addSi(siEntity)
         }
 
-        applicationRepository.create(app)
+        applicationRepository.save(app)
+    }
+
+    override fun reorganize(id: Long, application: ApplicationRequest) {
+        val applicationEntity = applicationRepository.getById(id)
+        applicationEntity.clearList()
+
+        for(si in application.listSi){
+            val siEntity = com.natasha.mmzdemo.domain.core.entity.Si(si.name, si.description, si.type, si.factoryNumber, si.count, si.numberOnRegister, si.note)
+            applicationEntity.addSi(siEntity)
+        }
+
+        applicationRepository.save(applicationEntity)
     }
 
     override fun getListOfSi(applicationId: Long): List<Si> {

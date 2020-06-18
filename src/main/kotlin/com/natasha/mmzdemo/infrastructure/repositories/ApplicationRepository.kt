@@ -10,7 +10,7 @@ import java.util.*
 
 @Component
 class ApplicationRepository(@Autowired private val springApplicationRepository: SpringApplicationRepository ) : IApplicationRepository{
-    override fun create(application: Application) {
+    override fun save(application: Application) {
         springApplicationRepository.save(application)
     }
 

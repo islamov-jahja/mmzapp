@@ -9,4 +9,5 @@ interface ApplicationService {
     fun createApplication(application: ApplicationRequest, userName: String)
     fun getListOfSi(applicationId: Long): List<Si>
     fun getList(authenticatedUser: AuthenticatedUser): List<ApplicationResponse>
+    fun reorganize(id: Long, application: ApplicationRequest)
 }

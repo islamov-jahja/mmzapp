@@ -31,6 +31,12 @@ class ApplicationController(@Autowired val applicationService: ApplicationServic
         return ResponseEntity.ok().body(listOfSi)
     }
 
+    @PostMapping("/{id}/reorganize")
+    fun reorganize(@PathVariable id: Long, @RequestBody application: ApplicationRequest): ResponseEntity<Any>{
+        applicationService.reorganize(id, application)
+        return ResponseEntity.ok().build()
+    }
+
     @GetMapping("")
     fun getApplications(): ResponseEntity<List<ApplicationResponse>>{
         val applicationsResponse = applicationService.getList(authenticatedUser)

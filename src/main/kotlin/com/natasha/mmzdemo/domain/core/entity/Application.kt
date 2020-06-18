@@ -40,6 +40,10 @@ class Application(_date: Date,
         return listSi.toList()
     }
 
+    fun clearList(){
+        listSi.clear()
+    }
+
     fun toApplicationResponse(): ApplicationResponse{
         val newStatus = when(status){
             "Created" -> ApplicationStatus.Created
