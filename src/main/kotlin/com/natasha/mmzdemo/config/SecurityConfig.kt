@@ -51,7 +51,7 @@ class SecurityConfig() : WebSecurityConfigurerAdapter() {
             http.cors().and().csrf().disable().authorizeRequests()
                     .antMatchers(HttpMethod.POST,"/api/auth/reg").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/auth/login").anonymous()
-                    .antMatchers(HttpMethod.GET, "/api/auth/info", "/application", "/api/application/{id}/listSi", "/api/application").authenticated()
+                    .antMatchers(HttpMethod.GET, "/api/auth/info", "/application", "/api/application/{id}/listSi", "/api/application", "/api/application/{id}", "/api/application/{id}/Contract").authenticated()
                     .antMatchers(HttpMethod.GET, "/api/auth/client/{id}").hasAuthority(Role.Admin.toString())
                     .antMatchers(HttpMethod.POST, "/api/application", "/api/application/{id}/reorganize", "/api/application/{id}/Contract").hasAuthority(Role.Client.toString())
                     .antMatchers(HttpMethod.POST, "/api/application/{id}/deny").hasAuthority(Role.Admin.toString())
