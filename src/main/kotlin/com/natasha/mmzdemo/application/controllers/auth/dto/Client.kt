@@ -15,7 +15,6 @@ data class Client (val inn: String,
                    val fioDirector: String,
                    val positionDirector: String,
                    val contactPerson: ContactPerson){
-    private var passwordHash = ""
 
     fun toEntity(): Client {
         return Client(
@@ -28,16 +27,12 @@ data class Client (val inn: String,
                 paymentAccount,
                 phoneClient,
                 emailOfClient,
-                passwordHash,
+                "",
                 fioDirector,
                 positionDirector,
                 contactPerson.fio,
                 contactPerson.phone,
                 contactPerson.email
         )
-    }
-
-    fun setPasswordHash(_passwordHash: String){
-        passwordHash = _passwordHash
     }
 }

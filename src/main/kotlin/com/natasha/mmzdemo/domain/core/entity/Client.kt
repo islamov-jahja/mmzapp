@@ -74,5 +74,9 @@ class Client(_inn: String,
     val emailContactPerson = _emailContactPerson
 
     @Column(name = "password", nullable = false)
-    val password = _password
+    var password = _password
+
+    fun setPasswordHash(_passwordHash: String){
+        password = _passwordHash
+    }
 }

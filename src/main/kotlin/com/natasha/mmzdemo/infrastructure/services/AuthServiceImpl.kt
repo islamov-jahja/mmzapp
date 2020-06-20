@@ -13,7 +13,8 @@ class AuthServiceImpl(@Autowired private val clientRepository: IClientRepository
                       @Autowired private val passwordProcessor: PasswordProcessor) : AuthService {
     override fun reg(client: Client) {
         val passwordHash = passwordProcessor.getHashOfPassword(client.password)
-        client.setPasswordHash(passwordHash)
+        val entity = client.toEntity()
+        entity.setPasswordHash(passwordHash)
         clientRepository.add(client.toEntity())
      }
 
