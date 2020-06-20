@@ -2,6 +2,7 @@ package com.natasha.mmzdemo.domain.core.entity
 
 import com.natasha.mmzdemo.application.controllers.application.dto.ApplicationResponse
 import com.natasha.mmzdemo.domain.core.enums.ApplicationStatus
+import org.jetbrains.annotations.Nullable
 import java.util.*
 import javax.persistence.*
 
@@ -41,6 +42,7 @@ class Application(_date: Date,
 
     @OneToOne(cascade = arrayOf(CascadeType.ALL))
     @JoinColumn(name= "denied_message_id")
+    @Nullable
     var deniedMessage: DeniedMessage? = _deniedMessage
 
     fun setContract(_contract: Contract){
