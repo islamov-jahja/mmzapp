@@ -1,9 +1,6 @@
 package com.natasha.mmzdemo.application.controllers.application
 
-import com.natasha.mmzdemo.application.controllers.application.dto.ApplicationRequest
-import com.natasha.mmzdemo.application.controllers.application.dto.ApplicationResponse
-import com.natasha.mmzdemo.application.controllers.application.dto.DeniedMessage
-import com.natasha.mmzdemo.application.controllers.application.dto.Si
+import com.natasha.mmzdemo.application.controllers.application.dto.*
 import com.natasha.mmzdemo.domain.core.services.ApplicationService
 import com.natasha.mmzdemo.middleware.security.AuthenticatedUser
 import org.springframework.beans.factory.annotation.Autowired
@@ -53,8 +50,8 @@ class ApplicationController(@Autowired val applicationService: ApplicationServic
     }
 
     @PostMapping("/{id}/deny")
-    fun denyApplication(@PathVariable id: Long, @RequestBody denyMessage: String): ResponseEntity<Any>{
-        applicationService.denyApplication(DeniedMessage(denyMessage, Date()), id)
+    fun denyApplication(@PathVariable id: Long, @RequestBody denyMessage: DenyRequest): ResponseEntity<Any>{
+        applicationService.denyApplication(DeniedMessage(denyMessage.denyMessage, Date()), id)
         return ResponseEntity.ok().build()
     }
 }
