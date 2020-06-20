@@ -18,7 +18,7 @@ class ContractController(@Autowired val contractService: ContractService) {
         return ResponseEntity.ok().build()
     }
 
-    @GetMapping(""
+    @GetMapping("")
     fun getContract(@PathVariable id: Long): ResponseEntity<ContractResponse>{
         val contractResponse: ContractResponse = contractService.get(id)
         return ResponseEntity.ok(contractResponse)
