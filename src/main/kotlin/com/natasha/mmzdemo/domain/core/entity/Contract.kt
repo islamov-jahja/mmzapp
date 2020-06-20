@@ -13,10 +13,10 @@ class Contract(_status: ContractStatus, _mainFileName: String) {
     val id: Long = 0
 
     @Column(name = "status")
-    val status: String = _status.toString()
+    var status: String = _status.toString()
 
     @Column(name = "main_file_name")
-    val mainFileName: String = _mainFileName
+    private var mainFileName: String = _mainFileName
 
     @OneToMany(fetch = FetchType.EAGER, cascade = arrayOf(CascadeType.ALL))
     private val listPath: MutableList<PathToContract> = mutableListOf()
@@ -30,6 +30,7 @@ class Contract(_status: ContractStatus, _mainFileName: String) {
 
     fun addPath(pathToContract: PathToContract){
         listPath.add(pathToContract)
+        mainFileName = pathToContract.path
     }
 
     fun getListPath(): List<PathToContract>{

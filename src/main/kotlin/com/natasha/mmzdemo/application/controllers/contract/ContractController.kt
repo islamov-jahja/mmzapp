@@ -5,6 +5,7 @@ import com.natasha.mmzdemo.domain.core.services.ContractService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 import springfox.documentation.swagger2.annotations.EnableSwagger2
 
 @EnableSwagger2
@@ -24,5 +25,9 @@ class ContractController(@Autowired val contractService: ContractService) {
         return ResponseEntity.ok(contractResponse)
     }
 
-
+    @PostMapping("/upload")
+    fun uploadContract(@PathVariable id: Long, @RequestParam("file") file: MultipartFile): ResponseEntity<Any> {
+        contractService.uploadContract(id, file)
+        return ResponseEntity.ok().build()
+    }
 }
