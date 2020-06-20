@@ -31,5 +31,9 @@ class ContractController(@Autowired val contractService: ContractService) {
         return ResponseEntity.ok().build()
     }
 
-    
+    @PostMapping("/confirm")
+    fun confirmContract(@PathVariable id: Long): ResponseEntity<Any>{
+        contractService.confirmContract(id)
+        return ResponseEntity.ok().build()
+    }
 }

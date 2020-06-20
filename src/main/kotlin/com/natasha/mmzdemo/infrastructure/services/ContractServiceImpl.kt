@@ -72,25 +72,47 @@ class ContractServiceImpl(@Autowired private val authenticatedUser: Authenticate
             throw InvalidApplicationStatus()
         }
 
-        val contract = application.getContract()
-        if (contract != null) {
-            if (contract.status == ContractStatus.ReorganizeByAdmin.toString() && authenticatedUser.role == Role.Admin){
-                throw InvalidContractStatusException()
-            }
+        val contract = application.getContract() ?: throw ContractNotFoundException()
 
-            if (contract.status == ContractStatus.ReorganizeByClient.toString() && authenticatedUser.role == Role.Client){
-                throw InvalidContractStatusException()
-            }
-
-            if (contract.status == ContractStatus.ReorganizeByAdmin.toString()){
-                clientChecker.throwExceptionIfWrongClient(applicationId)
-            }
-
-            val fileName = getCreatedFileName(file)
-            contract.addPath(PathToContract(fileName))
-            changeStatusOfContract(contract)
-            contractRepository.save(contract)
+        if (contract.status == ContractStatus.ReorganizeByAdmin.toString() && authenticatedUser.role == Role.Admin){
+            throw InvalidContractStatusException()
         }
+
+        if (contract.status == ContractStatus.ReorganizeByClient.toString() && authenticatedUser.role == Role.Client){
+            throw InvalidContractStatusException()
+        }
+
+        if (contract.status == ContractStatus.ReorganizeByAdmin.toString()){
+            clientChecker.throwExceptionIfWrongClient(applicationId)
+        }
+
+        val fileName = getCreatedFileName(file)
+        contract.addPath(PathToContract(fileName))
+        changeStatusOfContract(contract)
+        contractRepository.save(contract)
+    }
+
+    override fun confirmContract(applicationId: Long) {
+        val application = applicationRepository.getById(applicationId)
+
+        if (application.getStatus() != ApplicationStatus.Contract){
+            throw InvalidApplicationStatus()
+        }
+
+        val contract = application.getContract() ?: throw ContractNotFoundException()
+
+        if (contract.status == ContractStatus.ReorganizeByAdmin.toString() && authenticatedUser.role == Role.Admin){
+            throw InvalidContractStatusException()
+        }
+
+        if (contract.status == ContractStatus.ReorganizeByClient.toString() && authenticatedUser.role == Role.Client){
+            throw InvalidContractStatusException()
+        }
+
+        contract.status = ContractStatus.Completed.toString()
+        application.setStatus(ApplicationStatus.ContractCompleted)
+        contractRepository.save(contract)
+        applicationRepository.save(application)
     }
 
     private fun changeStatusOfContract(contract: Contract){

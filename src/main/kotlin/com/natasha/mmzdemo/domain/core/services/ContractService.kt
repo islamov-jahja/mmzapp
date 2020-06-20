@@ -7,4 +7,5 @@ interface ContractService {
     fun createContract(applicationId: Long)
     fun get(applicationId: Long): ContractResponse
     fun uploadContract(applicationId: Long, file: MultipartFile)
+    fun confirmContract(applicationId: Long)
 }
