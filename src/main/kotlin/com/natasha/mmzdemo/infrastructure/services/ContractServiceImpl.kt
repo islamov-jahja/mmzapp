@@ -16,7 +16,6 @@ import com.natasha.mmzdemo.infrastructure.models.Role
 import com.natasha.mmzdemo.infrastructure.repositories.ApplicationRepository
 import com.natasha.mmzdemo.infrastructure.repositories.ClientRepository
 import com.natasha.mmzdemo.middleware.security.AuthenticatedUser
-import com.sun.jdi.request.InvalidRequestStateException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.util.*
