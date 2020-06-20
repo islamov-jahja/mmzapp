@@ -12,5 +12,5 @@ class PathToContract(_path: String) {
     @Column(name = "path")
     val path: String = _path
 
-    fun toDTO():PathToContractDTO = PathToContractDTO(path)
+    fun toDTO():PathToContractDTO = PathToContractDTO("https://mmnewapp.herokuapp.com/$path")
 }

@@ -42,6 +42,6 @@ class Contract(_status: ContractStatus, _mainFileName: String) {
             listPathDTO.add(path.toDTO())
         }
 
-        return ContractResponse(status, mainFileName, dateOfConclusion, listPathDTO)
+        return ContractResponse(status, "https://mmnewapp.herokuapp.com/$mainFileName", dateOfConclusion, listPathDTO)
     }
 }
