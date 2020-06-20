@@ -46,6 +46,12 @@ class ApplicationController(@Autowired val applicationService: ApplicationServic
         return ResponseEntity.ok().body(applicationsResponse)
     }
 
+    @GetMapping("/{id}")
+    fun getApplication(@PathVariable id: Long): ResponseEntity<ApplicationResponse>{
+        val application = applicationService.getApplicationById(id)
+        return ResponseEntity.ok(application)
+    }
+
     @PostMapping("/{id}/deny")
     fun denyApplication(@PathVariable id: Long, @RequestBody denyMessage: String): ResponseEntity<Any>{
         applicationService.denyApplication(DeniedMessage(denyMessage, Date()), id)

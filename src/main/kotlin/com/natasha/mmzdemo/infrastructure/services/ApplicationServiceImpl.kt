@@ -71,6 +71,15 @@ class ApplicationServiceImpl(@Autowired private val applicationRepository: Appli
         applicationRepository.save(application)
     }
 
+    override fun getApplicationById(id: Long): ApplicationResponse {
+        val application = applicationRepository.getById(id);
+        if (application == null){
+            throw ApplicationNotFoundException()
+        }
+
+        return application.toApplicationResponse()
+    }
+
     fun generateApplicationFile(application: ApplicationRequest): String{
         val fileName = UUID.randomUUID().toString() + ".docx"
         applicationDocxGenerator?.generate(application.listSi, Date(), fileName)
