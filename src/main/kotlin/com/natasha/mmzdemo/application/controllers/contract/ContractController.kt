@@ -30,4 +30,6 @@ class ContractController(@Autowired val contractService: ContractService) {
         contractService.uploadContract(id, file)
         return ResponseEntity.ok().build()
     }
+
+    
 }

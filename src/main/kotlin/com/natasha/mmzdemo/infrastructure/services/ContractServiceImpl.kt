@@ -82,6 +82,10 @@ class ContractServiceImpl(@Autowired private val authenticatedUser: Authenticate
                 throw InvalidContractStatusException()
             }
 
+            if (contract.status == ContractStatus.ReorganizeByAdmin.toString()){
+                clientChecker.throwExceptionIfWrongClient(applicationId)
+            }
+
             val fileName = getCreatedFileName(file)
             contract.addPath(PathToContract(fileName))
             changeStatusOfContract(contract)

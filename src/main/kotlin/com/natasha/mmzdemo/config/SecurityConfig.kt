@@ -53,6 +53,7 @@ class SecurityConfig() : WebSecurityConfigurerAdapter() {
                     .antMatchers(HttpMethod.POST, "/api/auth/login").anonymous()
                     .antMatchers(HttpMethod.GET, "/api/auth/info", "/application", "/api/application/{id}/listSi", "/api/application", "/api/application/{id}", "/api/application/{id}/Contract").authenticated()
                     .antMatchers(HttpMethod.GET, "/api/auth/client/{id}").hasAuthority(Role.Admin.toString())
+                    .antMatchers(HttpMethod.POST, "/api/application/{id}/Contract/upload").authenticated()
                     .antMatchers(HttpMethod.POST, "/api/application", "/api/application/{id}/reorganize").hasAuthority(Role.Client.toString())
                     .antMatchers(HttpMethod.POST, "/api/application/{id}/deny", "/api/application/{id}/Contract").hasAuthority(Role.Admin.toString())
                     .anyRequest().permitAll()
