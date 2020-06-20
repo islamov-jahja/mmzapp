@@ -15,7 +15,7 @@ class AuthServiceImpl(@Autowired private val clientRepository: IClientRepository
         val passwordHash = passwordProcessor.getHashOfPassword(client.password)
         val entity = client.toEntity()
         entity.setPasswordHash(passwordHash)
-        clientRepository.add(client.toEntity())
+        clientRepository.add(entity)
      }
 
     override fun getClient(userName: String): Client {
