@@ -12,6 +12,7 @@ import com.natasha.mmzdemo.domain.core.entity.Application
 import com.natasha.mmzdemo.domain.core.enums.ApplicationStatus
 import com.natasha.mmzdemo.domain.core.services.ApplicationService
 import com.natasha.mmzdemo.infrastructure.helpers.ApplicationDocxGenerator
+import com.natasha.mmzdemo.infrastructure.helpers.ClientChecker
 import com.natasha.mmzdemo.infrastructure.models.Role
 import com.natasha.mmzdemo.infrastructure.repositories.ApplicationRepository
 import com.natasha.mmzdemo.infrastructure.repositories.ClientRepository
@@ -22,7 +23,9 @@ import java.util.*
 
 @Component
 class ApplicationServiceImpl(@Autowired private val applicationRepository: ApplicationRepository,
-                             @Autowired private val clientRepository: ClientRepository) : ApplicationService {
+                             @Autowired private val clientRepository: ClientRepository,
+                             @Autowired private val authenticatedUser: AuthenticatedUser,
+                             @Autowired private val clientChecker: ClientChecker) : ApplicationService {
 
     @Autowired
     private val applicationDocxGenerator: ApplicationDocxGenerator? = null
@@ -75,6 +78,10 @@ class ApplicationServiceImpl(@Autowired private val applicationRepository: Appli
         val application = applicationRepository.getById(id);
         if (application == null){
             throw ApplicationNotFoundException()
+        }
+
+        if (authenticatedUser.role == Role.Client){
+            clientChecker.throwExceptionIfWrongClient(id)
         }
 
         return application.toApplicationResponse()

@@ -10,7 +10,9 @@ import com.natasha.mmzdemo.domain.core.enums.ApplicationStatus
 import com.natasha.mmzdemo.domain.core.enums.ContractStatus
 import com.natasha.mmzdemo.domain.core.services.ContractService
 import com.natasha.mmzdemo.infrastructure.helpers.ApplicationDocxGenerator
+import com.natasha.mmzdemo.infrastructure.helpers.ClientChecker
 import com.natasha.mmzdemo.infrastructure.helpers.ContractDocxGenerator
+import com.natasha.mmzdemo.infrastructure.models.Role
 import com.natasha.mmzdemo.infrastructure.repositories.ApplicationRepository
 import com.natasha.mmzdemo.infrastructure.repositories.ClientRepository
 import com.natasha.mmzdemo.middleware.security.AuthenticatedUser
@@ -22,12 +24,11 @@ import java.util.*
 @Component
 class ContractServiceImpl(@Autowired private val authenticatedUser: AuthenticatedUser,
                           @Autowired private val applicationRepository: ApplicationRepository,
-                          @Autowired private val clientRepository: ClientRepository) : ContractService {
+                          @Autowired private val clientChecker: ClientChecker) : ContractService {
     @Autowired
     private val contractDocxGenerator: ContractDocxGenerator? = null
 
     override fun createContract(applicationId: Long) {
-        throwExceptionIfWrongClient(applicationId)
         val application = applicationRepository.getById(applicationId)
         if (application.getStatus() != ApplicationStatus.Created){
             throw InvalidApplicationStatus()
@@ -45,6 +46,10 @@ class ContractServiceImpl(@Autowired private val authenticatedUser: Authenticate
     }
 
     override fun get(applicationId: Long): ContractResponse {
+        if (authenticatedUser.role == Role.Client){
+            clientChecker.throwExceptionIfWrongClient(applicationId)
+        }
+
         val application = applicationRepository.getById(applicationId)
         if (application.getStatus() < ApplicationStatus.Contract){
             throw InvalidApplicationStatus()
@@ -52,13 +57,5 @@ class ContractServiceImpl(@Autowired private val authenticatedUser: Authenticate
 
         val contract = application.getContract()?: throw ContractNotFoundException()
         return contract.toDTO()
-    }
-
-    private fun throwExceptionIfWrongClient(applicationId: Long){
-        val username = authenticatedUser.userName
-        val application = applicationRepository.getById(applicationId)
-        if (application.client.emailOfClient != username){
-            throw WrongClientException()
-        }
     }
 }
