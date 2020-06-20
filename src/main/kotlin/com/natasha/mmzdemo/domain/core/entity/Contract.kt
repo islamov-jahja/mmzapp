@@ -1,5 +1,7 @@
 package com.natasha.mmzdemo.domain.core.entity
 
+import com.natasha.mmzdemo.application.controllers.contract.dto.ContractResponse
+import com.natasha.mmzdemo.application.controllers.contract.dto.PathToContractDTO
 import com.natasha.mmzdemo.domain.core.enums.ContractStatus
 import java.util.*
 import javax.persistence.*
@@ -32,5 +34,14 @@ class Contract(_status: ContractStatus, _mainFileName: String) {
 
     fun getListPath(): List<PathToContract>{
         return listPath.toList()
+    }
+
+    fun toDTO(): ContractResponse{
+        val listPathDTO: MutableList<PathToContractDTO> = mutableListOf()
+        for (path in getListPath()){
+            listPathDTO.add(path.toDTO())
+        }
+
+        return ContractResponse(status, mainFileName, dateOfConclusion, listPathDTO)
     }
 }

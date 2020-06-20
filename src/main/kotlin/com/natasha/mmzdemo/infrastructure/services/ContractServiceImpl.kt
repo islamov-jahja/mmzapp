@@ -1,6 +1,8 @@
 package com.natasha.mmzdemo.infrastructure.services
 
 import com.natasha.mmzdemo.application.controllers.application.exceptions.InvalidApplicationStatus
+import com.natasha.mmzdemo.application.controllers.contract.dto.ContractResponse
+import com.natasha.mmzdemo.application.controllers.contract.exceptions.ContractNotFoundException
 import com.natasha.mmzdemo.application.controllers.contract.exceptions.WrongClientException
 import com.natasha.mmzdemo.domain.core.entity.Contract
 import com.natasha.mmzdemo.domain.core.entity.PathToContract
@@ -12,6 +14,7 @@ import com.natasha.mmzdemo.infrastructure.helpers.ContractDocxGenerator
 import com.natasha.mmzdemo.infrastructure.repositories.ApplicationRepository
 import com.natasha.mmzdemo.infrastructure.repositories.ClientRepository
 import com.natasha.mmzdemo.middleware.security.AuthenticatedUser
+import com.sun.jdi.request.InvalidRequestStateException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.util.*
@@ -39,6 +42,16 @@ class ContractServiceImpl(@Autowired private val authenticatedUser: Authenticate
         contractDocxGenerator?.generate(client, fileName)
         application.setStatus(ApplicationStatus.Contract)
         applicationRepository.save(application)
+    }
+
+    override fun get(applicationId: Long): ContractResponse {
+        val application = applicationRepository.getById(applicationId)
+        if (application.getStatus() < ApplicationStatus.Contract){
+            throw InvalidApplicationStatus()
+        }
+
+        val contract = application.getContract()?: throw ContractNotFoundException()
+        return contract.toDTO()
     }
 
     private fun throwExceptionIfWrongClient(applicationId: Long){

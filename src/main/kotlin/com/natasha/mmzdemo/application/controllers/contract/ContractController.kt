@@ -1,5 +1,6 @@
 package com.natasha.mmzdemo.application.controllers.contract
 
+import com.natasha.mmzdemo.application.controllers.contract.dto.ContractResponse
 import com.natasha.mmzdemo.domain.core.services.ContractService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -15,5 +16,11 @@ class ContractController(@Autowired val contractService: ContractService) {
     fun createContract(@PathVariable id: Long): ResponseEntity<Any>{
         contractService.createContract(id)
         return ResponseEntity.ok().build()
+    }
+
+    @GetMapping("")
+    fun getContract(@PathVariable id: Long): ResponseEntity<ContractResponse>{
+        val contractResponse: ContractResponse = contractService.get(id)
+        return ResponseEntity.ok(contractResponse)
     }
 }
