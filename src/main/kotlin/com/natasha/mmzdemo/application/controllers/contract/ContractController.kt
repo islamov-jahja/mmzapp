@@ -23,4 +23,6 @@ class ContractController(@Autowired val contractService: ContractService) {
         val contractResponse: ContractResponse = contractService.get(id)
         return ResponseEntity.ok(contractResponse)
     }
+
+
 }
