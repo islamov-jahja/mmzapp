@@ -5,5 +5,6 @@ import java.util.*
 data class ContractResponse(val status: String,
                             val mainFileName: String,
                             val dateOfConclusion: Date?,
-                            val listPath: List<PathToContractDTO>) {
+                            val listPath: List<PathToContractDTO>,
+                            val pathToInvoice: String?) {
 }

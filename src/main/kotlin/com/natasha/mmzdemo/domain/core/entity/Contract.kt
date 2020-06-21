@@ -21,6 +21,9 @@ class Contract(_status: ContractStatus, _mainFileName: String) {
     @OneToMany(fetch = FetchType.EAGER, cascade = arrayOf(CascadeType.ALL))
     private val listPath: MutableList<PathToContract> = mutableListOf()
 
+    @Column(name = "path_to_invoice")
+    var invoiceFileName: String = ""
+
     @Column(name = "date_of_conclusion")
     private var dateOfConclusion: Date = Date()
 
@@ -43,6 +46,6 @@ class Contract(_status: ContractStatus, _mainFileName: String) {
             listPathDTO.add(path.toDTO())
         }
 
-        return ContractResponse(status, "https://mmnewapp.herokuapp.com/$mainFileName", dateOfConclusion, listPathDTO)
+        return ContractResponse(status, "https://mmnewapp.herokuapp.com/$mainFileName", dateOfConclusion, listPathDTO, "https://mmnewapp.herokuapp.com/$invoiceFileName")
     }
 }

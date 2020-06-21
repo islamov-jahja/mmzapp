@@ -11,34 +11,38 @@ class Si(_name: String,
          _factoryNumber: String,
          _count: Int,
          _numberOnRegister: String,
-         _note: String) {
+         _note: String,
+        _price: Double?) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private val id: Long = 0
+    val id: Long = 0
 
     @Column(name = "name", nullable = false)
-    private val name = _name
+    val name = _name
 
     @Column(name = "description")
-    private val description = _description
+    val description = _description
 
     @Column(name = "type")
-    private val type: String = _type
+    val type: String = _type
 
     @Column(name = "factory_number")
-    private val factoryNumber: String = _factoryNumber
+    val factoryNumber: String = _factoryNumber
 
     @NotNull
     @Column(name = "count", nullable = false)
-    private val count: Int = _count
+    val count: Int = _count
 
     @Column(name = "number_on_register")
-    private val numberOnRegister: String = _numberOnRegister
+    val numberOnRegister: String = _numberOnRegister
 
     @Column(name = "note")
-    private val note: String = _note
+    val note: String = _note
+
+    @Column(name = "price")
+    var _price: Double? = _price
 
     fun toDTO(): Si{
-        return Si(name, description, type, factoryNumber, count, numberOnRegister, note)
+        return Si(id, name, description, type, factoryNumber, count, numberOnRegister, note)
     }
 }

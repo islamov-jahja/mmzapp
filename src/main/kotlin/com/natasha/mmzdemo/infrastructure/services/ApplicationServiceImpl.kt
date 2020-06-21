@@ -37,7 +37,7 @@ class ApplicationServiceImpl(@Autowired private val applicationRepository: Appli
         val app = Application(Date(), client, ApplicationStatus.Created, fileName, null)
 
         for (si in application.listSi){
-            val siEntity = com.natasha.mmzdemo.domain.core.entity.Si(si.name, si.description, si.type, si.factoryNumber, si.count, si.numberOnRegister, si.note)
+            val siEntity = com.natasha.mmzdemo.domain.core.entity.Si(si.name, si.description, si.type, si.factoryNumber, si.count, si.numberOnRegister, si.note, null)
             app.addSi(siEntity)
         }
 
@@ -52,7 +52,7 @@ class ApplicationServiceImpl(@Autowired private val applicationRepository: Appli
         applicationEntity.setFileName(fileName)
 
         for(si in application.listSi){
-            val siEntity = com.natasha.mmzdemo.domain.core.entity.Si(si.name, si.description, si.type, si.factoryNumber, si.count, si.numberOnRegister, si.note)
+            val siEntity = com.natasha.mmzdemo.domain.core.entity.Si(si.name, si.description, si.type, si.factoryNumber, si.count, si.numberOnRegister, si.note, null)
             applicationEntity.addSi(siEntity)
         }
 

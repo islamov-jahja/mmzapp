@@ -2,7 +2,8 @@ package com.natasha.mmzdemo.application.controllers.application.dto
 
 import com.natasha.mmzdemo.domain.core.entity.Application
 
-data class Si(val name: String,
+data class Si(val id: Long,
+              val name: String,
               val description: String,
               val type: String,
               val factoryNumber: String,
