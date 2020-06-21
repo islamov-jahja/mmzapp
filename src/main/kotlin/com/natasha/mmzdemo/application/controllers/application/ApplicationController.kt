@@ -25,6 +25,18 @@ class ApplicationController(@Autowired val applicationService: ApplicationServic
         return ResponseEntity.ok().build()
     }
 
+    @PostMapping("/{id}/confirmPayWithClient")
+    fun confirmPayWithClient(@PathVariable id: Long): ResponseEntity<Any>{
+        applicationService.confirmPaidWithClient(id)
+        return ResponseEntity.ok().build()
+    }
+
+    @PostMapping("/{id}/confirmPaidWithAdmin")
+    fun confirmPaidWithAdmin(@PathVariable id: Long): ResponseEntity<Any>{
+        applicationService.confirmPaidWithAdmin(id)
+        return ResponseEntity.ok().build()
+    }
+
     @GetMapping("/{id}/listSi")
     fun getListOfSiInApplication(@PathVariable id: Long): ResponseEntity<List<Si>>{
         val listOfSi = applicationService.getListOfSi(id)

@@ -13,4 +13,6 @@ interface ApplicationService {
     fun reorganize(id: Long, application: ApplicationRequest)
     fun denyApplication(deniedMessage: DeniedMessage, id: Long)
     fun getApplicationById(id: Long): ApplicationResponse
+    fun confirmPaidWithClient(applicationId: Long)
+    fun confirmPaidWithAdmin(applicationId: Long)
 }

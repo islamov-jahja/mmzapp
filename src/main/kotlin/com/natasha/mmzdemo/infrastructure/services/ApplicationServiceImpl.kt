@@ -61,9 +61,6 @@ class ApplicationServiceImpl(@Autowired private val applicationRepository: Appli
 
     override fun denyApplication(deniedMessage: DeniedMessage, id: Long) {
         val application = applicationRepository.getById(id);
-        if (application == null){
-            throw ApplicationNotFoundException()
-        }
 
         if (application.getStatus() >= ApplicationStatus.SuccessfulPaid){
             throw InvalidApplicationStatus()
@@ -76,15 +73,33 @@ class ApplicationServiceImpl(@Autowired private val applicationRepository: Appli
 
     override fun getApplicationById(id: Long): ApplicationResponse {
         val application = applicationRepository.getById(id);
-        if (application == null){
-            throw ApplicationNotFoundException()
-        }
 
         if (authenticatedUser.role == Role.Client){
             clientChecker.throwExceptionIfWrongClient(id)
         }
 
         return application.toApplicationResponse()
+    }
+
+    override fun confirmPaidWithClient(applicationId: Long) {
+        clientChecker.throwExceptionIfWrongClient(applicationId)
+        val application = applicationRepository.getById(applicationId)
+        if (application.getStatus() != ApplicationStatus.Attorney){
+            throw InvalidApplicationStatus()
+        }
+
+        application.setStatus(ApplicationStatus.TryingPaid)
+        applicationRepository.save(application)
+    }
+
+    override fun confirmPaidWithAdmin(applicationId: Long){
+        val application = applicationRepository.getById(applicationId)
+        if (application.getStatus() != ApplicationStatus.TryingPaid){
+            throw InvalidApplicationStatus()
+        }
+
+        application.setStatus(ApplicationStatus.SuccessfulPaid)
+        applicationRepository.save(application)
     }
 
     fun generateApplicationFile(application: ApplicationRequest): String{
