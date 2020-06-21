@@ -80,6 +80,10 @@ class Application(_date: Date,
             ApplicationStatus.Contract.toString() -> ApplicationStatus.Contract
             ApplicationStatus.Closed.toString() -> ApplicationStatus.Closed
             ApplicationStatus.Denied.toString() -> ApplicationStatus.Denied
+            ApplicationStatus.ContractCompleted.toString() -> ApplicationStatus.ContractCompleted
+            ApplicationStatus.Attorney.toString() -> ApplicationStatus.Attorney
+            ApplicationStatus.TryingPaid.toString() -> ApplicationStatus.TryingPaid
+            ApplicationStatus.SuccessfulPaid.toString() -> ApplicationStatus.SuccessfulPaid
             else -> ApplicationStatus.Closed
         }
     }

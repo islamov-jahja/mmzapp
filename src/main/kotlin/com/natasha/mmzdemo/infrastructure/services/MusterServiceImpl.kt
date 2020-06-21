@@ -38,14 +38,11 @@ class MusterServiceImpl(@Autowired private val authenticatedUser: AuthenticatedU
         setPriceToSi(listSiWithPrice, application.getListSi())
         val fileName = UUID.randomUUID().toString() + ".docx"
         InvoiceForPaymentDocxGenerator?.generate(application.client, application.getListSi(), fileName)
-        val contract = application.getContract()
-
-        if (contract == null){
-            throw ContractNotFoundException()
-        }
-
+        val contract = application.getContract() ?: throw ContractNotFoundException()
+        application.setStatus(ApplicationStatus.Attorney)
         contract.invoiceFileName = fileName
         contractRepository.save(contract)
+        applicationRepository.save(application)
     }
 
     fun setPriceToSi(listSiWithPrice: List<SiWithPriceDTO>, listSi: List<Si>){
