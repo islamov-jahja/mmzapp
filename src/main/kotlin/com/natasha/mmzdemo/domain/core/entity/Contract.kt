@@ -24,6 +24,9 @@ class Contract(_status: ContractStatus, _mainFileName: String) {
     @Column(name = "path_to_invoice")
     var invoiceFileName: String = ""
 
+    @Column(name = "path_to_certificate_of_completion")
+    var certificateOfCompletionFileName: String = ""
+
     @Column(name = "date_of_conclusion")
     private var dateOfConclusion: Date = Date()
 
@@ -46,6 +49,6 @@ class Contract(_status: ContractStatus, _mainFileName: String) {
             listPathDTO.add(path.toDTO())
         }
 
-        return ContractResponse(status, "https://mmnewapp.herokuapp.com/$mainFileName", dateOfConclusion, listPathDTO, "https://mmnewapp.herokuapp.com/$invoiceFileName")
+        return ContractResponse(status, "https://mmnewapp.herokuapp.com/$mainFileName", dateOfConclusion, listPathDTO, "https://mmnewapp.herokuapp.com/$invoiceFileName", "https://mmnewapp.herokuapp.com/$certificateOfCompletionFileName")
     }
 }

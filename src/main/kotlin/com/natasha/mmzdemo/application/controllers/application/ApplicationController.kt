@@ -18,6 +18,18 @@ class ApplicationController(@Autowired val applicationService: ApplicationServic
     @Autowired
     private var authenticatedUser: AuthenticatedUser = AuthenticatedUser()
 
+    @PostMapping("/{id}/result/send")
+    fun resultSend(@PathVariable id: Long): ResponseEntity<Any> {
+        applicationService.setResultSendStatus(id)
+        return ResponseEntity.ok().build()
+    }
+
+    @PostMapping("/{id}/result/obtain")
+    fun resultObtain(@PathVariable id: Long): ResponseEntity<Any>{
+        applicationService.setResultObtainStatus(id)
+        return ResponseEntity.ok().build()
+    }
+
     @PostMapping("")
     fun createApplication(@RequestBody application: ApplicationRequest): ResponseEntity<Any>{
         val userName = authenticatedUser.userName

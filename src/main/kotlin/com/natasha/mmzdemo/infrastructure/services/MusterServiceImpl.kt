@@ -1,6 +1,5 @@
 package com.natasha.mmzdemo.infrastructure.services
 
-import com.natasha.mmzdemo.application.controllers.application.exceptions.ApplicationNotFoundException
 import com.natasha.mmzdemo.application.controllers.application.exceptions.InvalidApplicationStatus
 import com.natasha.mmzdemo.application.controllers.contract.exceptions.ContractNotFoundException
 import com.natasha.mmzdemo.application.controllers.contract.exceptions.WrongClientException
@@ -8,7 +7,7 @@ import com.natasha.mmzdemo.application.controllers.muster.dto.SiWithPriceDTO
 import com.natasha.mmzdemo.domain.core.entity.Si
 import com.natasha.mmzdemo.domain.core.enums.ApplicationStatus
 import com.natasha.mmzdemo.domain.core.services.MusterService
-import com.natasha.mmzdemo.infrastructure.helpers.ContractDocxGenerator
+import com.natasha.mmzdemo.infrastructure.helpers.CertificateOfCompletionDocxGenerator
 import com.natasha.mmzdemo.infrastructure.helpers.InvoiceForPaymentDocxGenerator
 import com.natasha.mmzdemo.infrastructure.models.Role
 import com.natasha.mmzdemo.infrastructure.repositories.ApplicationRepository
@@ -23,7 +22,8 @@ class MusterServiceImpl(@Autowired private val authenticatedUser: AuthenticatedU
                         @Autowired private val applicationRepository: ApplicationRepository,
                         @Autowired private val contractRepository: ContractRepository) : MusterService {
     @Autowired
-    private val InvoiceForPaymentDocxGenerator: InvoiceForPaymentDocxGenerator? = null
+    private val invoiceForPaymentDocxGenerator: InvoiceForPaymentDocxGenerator? = null
+    @Autowired val certificateOfCompletionDocxGenerator: CertificateOfCompletionDocxGenerator? = null
 
     override fun doMuster(listSiWithPrice: List<SiWithPriceDTO>, applicationId: Long) {
         val application = applicationRepository.getById(applicationId)
@@ -36,11 +36,18 @@ class MusterServiceImpl(@Autowired private val authenticatedUser: AuthenticatedU
         }
 
         setPriceToSi(listSiWithPrice, application.getListSi())
-        val fileName = UUID.randomUUID().toString() + ".docx"
-        InvoiceForPaymentDocxGenerator?.generate(application.client, application.getListSi(), fileName)
+        val invoiceFileName = UUID.randomUUID().toString() + ".docx"
+        val certificateOfCompletionFileName = UUID.randomUUID().toString() + ".docx"
+
+        certificateOfCompletionDocxGenerator?.generate(application.client, application.getListSi(), certificateOfCompletionFileName)
+        invoiceForPaymentDocxGenerator?.generate(application.client, application.getListSi(), invoiceFileName)
+
         val contract = application.getContract() ?: throw ContractNotFoundException()
+
         application.setStatus(ApplicationStatus.Attorney)
-        contract.invoiceFileName = fileName
+        contract.invoiceFileName = invoiceFileName
+        contract.certificateOfCompletionFileName = certificateOfCompletionFileName
+
         contractRepository.save(contract)
         applicationRepository.save(application)
     }

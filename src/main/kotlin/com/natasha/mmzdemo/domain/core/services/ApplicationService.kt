@@ -15,4 +15,6 @@ interface ApplicationService {
     fun getApplicationById(id: Long): ApplicationResponse
     fun confirmPaidWithClient(applicationId: Long)
     fun confirmPaidWithAdmin(applicationId: Long)
+    fun setResultSendStatus(applicationId: Long)
+    fun setResultObtainStatus(applicationId: Long)
 }

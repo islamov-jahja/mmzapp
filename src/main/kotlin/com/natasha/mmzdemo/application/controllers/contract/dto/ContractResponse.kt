@@ -6,5 +6,6 @@ data class ContractResponse(val status: String,
                             val mainFileName: String,
                             val dateOfConclusion: Date?,
                             val listPath: List<PathToContractDTO>,
-                            val pathToInvoice: String?) {
+                            val pathToInvoice: String?,
+                            val certificateOfCompletionFileName: String?) {
 }

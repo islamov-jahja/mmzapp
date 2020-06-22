@@ -54,8 +54,16 @@ class SecurityConfig() : WebSecurityConfigurerAdapter() {
                     .antMatchers(HttpMethod.GET, "/api/auth/info", "/application", "/api/application/{id}/listSi", "/api/application", "/api/application/{id}", "/api/application/{id}/Contract").authenticated()
                     .antMatchers(HttpMethod.GET, "/api/auth/client/{id}").hasAuthority(Role.Admin.toString())
                     .antMatchers(HttpMethod.POST, "/api/application/{id}/Contract/upload").authenticated()
-                    .antMatchers(HttpMethod.POST, "/api/application", "/api/application/{id}/reorganize", "/api/application/{id}/confirmPayWithClient").hasAuthority(Role.Client.toString())
-                    .antMatchers(HttpMethod.POST, "/api/application/{id}/deny", "/api/application/{id}/Contract", "/api/application/{id}/muster").hasAuthority(Role.Admin.toString())
+                    .antMatchers(HttpMethod.POST,
+                            "/api/application",
+                            "/api/application/{id}/reorganize",
+                            "/api/application/{id}/confirmPayWithClient",
+                            "/api/application/{id}/result/obtain").hasAuthority(Role.Client.toString())
+                    .antMatchers(HttpMethod.POST,
+                            "/api/application/{id}/deny",
+                            "/api/application/{id}/Contract",
+                            "/api/application/{id}/muster",
+                            "/api/application/{id}/result/send").hasAuthority(Role.Admin.toString())
                     .anyRequest().permitAll()
                     .and()
                     .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()

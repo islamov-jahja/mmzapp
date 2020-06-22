@@ -102,6 +102,28 @@ class ApplicationServiceImpl(@Autowired private val applicationRepository: Appli
         applicationRepository.save(application)
     }
 
+    override fun setResultSendStatus(applicationId: Long) {
+        val application = applicationRepository.getById(applicationId)
+        if (application.getStatus() != ApplicationStatus.SuccessfulPaid){
+            throw InvalidApplicationStatus()
+        }
+
+        application.setStatus(ApplicationStatus.ResultSend)
+        applicationRepository.save(application)
+    }
+
+    override fun setResultObtainStatus(applicationId: Long) {
+        val application = applicationRepository.getById(applicationId)
+        if (application.getStatus() != ApplicationStatus.ResultSend){
+            throw InvalidApplicationStatus()
+        }
+
+        clientChecker.throwExceptionIfWrongClient(applicationId)
+
+        application.setStatus(ApplicationStatus.ResultObtained)
+        applicationRepository.save(application)
+    }
+
     fun generateApplicationFile(application: ApplicationRequest): String{
         val fileName = UUID.randomUUID().toString() + ".docx"
         applicationDocxGenerator?.generate(application.listSi, Date(), fileName)
