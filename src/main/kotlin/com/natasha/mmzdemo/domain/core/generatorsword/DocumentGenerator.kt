@@ -17,9 +17,8 @@ abstract class DocumentGenerator(_inputPath: String, _outputPath: String) {
     protected val outputPath = _outputPath
     protected lateinit var outputStream: FileOutputStream
     protected lateinit var dateFormat: SimpleDateFormat
+    protected val inputPath = _inputPath
     init {
-        val fileInputStream = FileInputStream(_inputPath)
-        docxFile = XWPFDocument(OPCPackage.open(fileInputStream))
         dateFormat = SimpleDateFormat("MM.WW.yyyy")
     }
 

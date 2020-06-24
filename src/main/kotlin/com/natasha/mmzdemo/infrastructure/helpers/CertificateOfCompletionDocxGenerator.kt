@@ -4,15 +4,20 @@ import com.ibm.icu.text.RuleBasedNumberFormat
 import com.natasha.mmzdemo.domain.core.entity.Client
 import com.natasha.mmzdemo.domain.core.entity.Si
 import com.natasha.mmzdemo.domain.core.generatorsword.DocumentGenerator
+import org.apache.poi.openxml4j.opc.OPCPackage
+import org.apache.poi.xwpf.usermodel.XWPFDocument
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import java.io.FileInputStream
 import java.util.*
 
 
 @Component
 class CertificateOfCompletionDocxGenerator(@Value("./resources/f4.docx") _inputPath: String, @Value("./public/") _outPath: String): DocumentGenerator(_inputPath, _outPath) {
     fun generate(client: Client, listSi: List<Si>, nameOfFile: String){
-        var table = docxFile.tables[0]
+        val fileInputStream = FileInputStream(super.inputPath)
+        docxFile = XWPFDocument(OPCPackage.open(fileInputStream))
+        val table = docxFile.tables[0]
 
         var number: Int = 0
         var sum: Double = 0.0
