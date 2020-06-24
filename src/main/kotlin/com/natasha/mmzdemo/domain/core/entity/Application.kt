@@ -84,6 +84,8 @@ class Application(_date: Date,
             ApplicationStatus.Attorney.toString() -> ApplicationStatus.Attorney
             ApplicationStatus.TryingPaid.toString() -> ApplicationStatus.TryingPaid
             ApplicationStatus.SuccessfulPaid.toString() -> ApplicationStatus.SuccessfulPaid
+            ApplicationStatus.ResultSend.toString() -> ApplicationStatus.ResultSend
+            ApplicationStatus.ResultObtained.toString() -> ApplicationStatus.ResultObtained
             else -> ApplicationStatus.Closed
         }
     }
