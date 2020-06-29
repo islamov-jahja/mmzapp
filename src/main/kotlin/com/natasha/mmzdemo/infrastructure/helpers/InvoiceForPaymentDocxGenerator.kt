@@ -36,6 +36,7 @@ class InvoiceForPaymentDocxGenerator(@Value("./resources/f3.docx") _inputPath: S
         val nf = RuleBasedNumberFormat(Locale.forLanguageTag("ru"),
                 RuleBasedNumberFormat.SPELLOUT)
 
+        super.replaceTextOnDocument(docxFile, "nds", sum.toString())
         super.replaceTextOnDocument(docxFile, "sum", sum.toString())
         super.replaceTextOnDocument(docxFile, "word", nf.format(sum))
         super.replaceTextOnDocument(docxFile, "count", number.toString())
